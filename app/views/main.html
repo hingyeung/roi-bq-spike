@@ -1,0 +1,7 @@
+<form class="form-inline">
+  <label>Select a business</label>
+  <select ng-model="businessName" ng-options="busName for busName in businessNames"></select>
+</form>
+
+<div google-chart chart="totalActionsChart" style="{{totalActionsChart.cssStyle}}"/>
+<div google-chart chart="totalImpressionsChart" style="{{totalImpressionsChart.cssStyle}}"/>
