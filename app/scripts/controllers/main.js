@@ -3,6 +3,7 @@
 angular.module('yeomanTestDeleteMeApp')
   .controller('MainCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.businessName = "";
+    $scope.book= "";
     $scope.businessNames = [];
 
     var createColumnChart = function() {
@@ -12,6 +13,7 @@ angular.module('yeomanTestDeleteMeApp')
         "cssStyle": "height:600px; width:100%;",
         "data": {},
         "options": {
+          "legend": {"position": "none"},
           "title": "",
           "isStacked": "true",
           "fill": 20,
@@ -64,6 +66,19 @@ angular.module('yeomanTestDeleteMeApp')
       });
     };
 
+    var fetchDataToListTopInteractionsByBook = function() {
+      if (!$scope.businessName || !$scope.book) return;
+
+      var promise = $http.get('http://localhost:5000/roi/topInteractions/' + $scope.businessName +'/' + $scope.book);
+      promise.success(function(data, status, headers, config) {
+        console.log(data);
+
+        $scope.topInteractionsByBook = data;
+      }).error(function(data, status, headers, config) {
+        console.log('Failed to download top interactions');
+      });
+    };
+
     var fetchDataToDrawTotalImpressionChart = function() {
       var promise = $http.get('http://localhost:5000/roi/allImpressions/' + $scope.businessName);
       promise.success(function(data, status, headers, config) {
@@ -111,7 +126,14 @@ angular.module('yeomanTestDeleteMeApp')
 
     $scope.$watch('businessName', function() {
       if ($scope.businessName === '') return;
-      fetchDataToDrawTotalActionChart();
-      fetchDataToDrawTotalImpressionChart();
+      // fetchDataToDrawTotalActionChart();
+      // fetchDataToDrawTotalImpressionChart();
+      fetchDataToListTopInteractionsByBook();
     });
+
+    $scope.$watch('book', function() {
+      if ($scope.book === '') return;
+
+      fetchDataToListTopInteractionsByBook();
+    })
   }]);

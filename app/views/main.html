@@ -1,7 +1,29 @@
 <form class="form-inline">
-  <label>Select a business</label>
+  <label>Business</label>
   <select ng-model="businessName" ng-options="busName for busName in businessNames"></select>
+  <label>Book</label>
+  <select ng-model="book">
+    <option value="BOOK1">BOOK1</option>
+    <option value="BOOK1">BOOK2</option>
+    <option value="BOOK1">BOOK3</option>
+    <option value="BOOK1">BOOK4</option>
+  </select>
 </form>
 
-<div google-chart chart="totalActionsChart" style="{{totalActionsChart.cssStyle}}"/>
-<div google-chart chart="totalImpressionsChart" style="{{totalImpressionsChart.cssStyle}}"/>
+<!--style="{{totalActionsChart.cssStyle}}"-->
+<div class="row-fluid">
+  <div  class="span6">
+    <div google-chart chart="totalActionsChart" />
+  </div>
+  <div  class="span6">
+    <div google-chart chart="totalImpressionsChart" />
+  </div>
+</div>
+
+<table>
+  <tr ng-repeat="interaction in topInteractionsByBook">
+    <td>{{interaction.channel}}</td>
+    <td>{{interaction.action}}</td>
+    <td>{{interaction.action_count}}</td>
+  </tr>
+</table>

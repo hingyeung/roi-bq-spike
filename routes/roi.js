@@ -2,6 +2,7 @@
 var https = require('https')
   , fs = require('fs')
   , bigquery = require('google-bigquery')
+  , ROI_PROJECT_ID = 'samuelli.net:roispike'
   , bqClient = bigquery({
         "iss": '361723984999@developer.gserviceaccount.com',
         "key": fs.readFileSync('roi-spike-privatekey.pem', 'utf8')
@@ -33,13 +34,13 @@ var https = require('https')
     // });
 
 exports.listDatasets = function(req, res){
-  bqClient.datasets.getAll('samuelli.net:roispike', function(err, datasets) {
+  bqClient.datasets.getAll(ROI_PROJECT_ID, function(err, datasets) {
     console.log(datasets);
   });
 };
 
 exports.getTop10BusinessWithMostActions = function(req, res) {
-  bqClient.jobs.query({projId: 'samuelli.net:roispike', query: 'SELECT  repository.url FROM [publicdata:samples.github_nested] LIMIT 10;'}, function(err, resp) {
+  bqClient.jobs.query({projId: ROI_PROJECT_ID, query: 'SELECT  repository.url FROM [publicdata:samples.github_nested] LIMIT 10;'}, function(err, resp) {
     if (err) { return console.log(err); }
     console.log(resp);
     res.send('Done');
@@ -72,6 +73,21 @@ var bigQueryCallback = function(res) {
   };
 };
 
+exports.getTopInteractionWithChannelForBusinessByBook = function(req, res) {
+  var businessName = req.params.businessName;
+  var book = req.params.book;
+  var query = 'select channel, action, count(action) as action_count ' +
+    ' from fake_roi_data.actions ' +
+    ' where business = "' + businessName + '" and ' +
+    ' book = "' + book + '" ' +
+    ' group by channel, action ' +
+    ' order by action_count desc ' +
+    ' limit 15 ';
+  console.log(query);
+
+  bqClient.jobs.query({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
+}
+
 exports.getAllImpressionsForBusiness = function(req, res) {
   var businessName = req.params.businessName;
   var query = 'select year,month,count(*) as impression_count ' +
@@ -81,7 +97,7 @@ exports.getAllImpressionsForBusiness = function(req, res) {
     ' order by year,month';
   console.log(query);
 
-  bqClient.jobs.query({projId: 'samuelli.net:roispike', query: query}, bigQueryCallback(res));
+  bqClient.jobs.query({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
 }
 
 exports.getAllActionsForBusiness = function(req, res) {
@@ -93,16 +109,5 @@ exports.getAllActionsForBusiness = function(req, res) {
   ' ORDER BY year, month';
   console.log(query);
 
-  // bqClient.jobs.query({projId: 'samuelli.net:roispike', query: query}, function(err, resp) {
-  //   if (err) {
-  //     console.log(err);
-  //     res.send('Error');
-  //     return;
-  //   }
-  //   console.log(resp);
-  //   res.contentType('application/json');
-  //   res.send(resp);
-  // });
-
-  bqClient.jobs.query({projId: 'samuelli.net:roispike', query: query}, bigQueryCallback(res));
+  bqClient.jobs.query({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
 };
