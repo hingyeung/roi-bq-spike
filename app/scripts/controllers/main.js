@@ -5,6 +5,7 @@ angular.module('yeomanTestDeleteMeApp')
     $scope.businessName = "";
     $scope.book= "";
     $scope.businessNames = [];
+    $scope.miscReportOptions = {year: 0, month: 0};
 
     var createColumnChart = function() {
       return {
@@ -34,6 +35,12 @@ angular.module('yeomanTestDeleteMeApp')
         }
       };
     };
+
+    var dateOffsetByMonth = function(offset) {
+      var newDate = new Date();
+      newDate.setMonth(newDate.getMonth() + offset);
+      return newDate;
+    }
 
     var fetchDataToDrawTotalActionChart = function() {
       var promise = $http.get('http://localhost:5000/roi/allActions/' + $scope.businessName);
@@ -66,10 +73,50 @@ angular.module('yeomanTestDeleteMeApp')
       });
     };
 
-    var fetchDataToListTopInteractionsByBook = function() {
-      if (!$scope.businessName || !$scope.book) return;
+    var fetchDataToDrawImpressionsByChannelAndBookChartFromLastMonth = function() {
+      if (! $scope.bothBusNameAndBookAreSelected()) return;
 
-      var promise = $http.get('http://localhost:5000/roi/topInteractions/' + $scope.businessName +'/' + $scope.book);
+      var lastMonth = dateOffsetByMonth(-1);
+      $scope.miscReportOptions = {year: lastMonth.getFullYear(), month: lastMonth.getMonth() + 1};
+      var lastMonth = dateOffsetByMonth(-1)
+        , promise = $http.get('http://localhost:5000/roi/impressionsByBook/' + $scope.businessName +'/' + $scope.book + '/' + lastMonth.getFullYear() + '/' + (lastMonth.getMonth() + 1));
+      
+      promise.success(function(data, status, headers, config) {
+        console.log(data);
+
+        $scope.impressionsByChannelAndBookChart.options.vAxis.title = "Impressions";
+        $scope.impressionsByChannelAndBookChart.options.hAxis.title = "Channel";
+        $scope.impressionsByChannelAndBookChart.options.title = "Impressions for " + $scope.businessName + " in " + $scope.miscReportOptions.month + "/" + $scope.miscReportOptions.year;
+        var cols = [{
+          id: "channel",
+          label: "Channel",
+          type: "string"
+        },
+        {
+          id: "impressions",
+          label: "Impressions",
+          type: "number"
+        }], rows = [];
+        for (var idx = 0; idx < data.length; idx++) {
+          var row = data[idx];
+          rows.push({
+            c: [{v: row.channel}, {v: row.impression_count}]
+          });
+        }
+
+        $scope.impressionsByChannelAndBookChart.data.cols = cols;
+        $scope.impressionsByChannelAndBookChart.data.rows = rows;
+      }).error(function(data, status, headers, config) {
+        console.log('Failed to download impressions by book');
+      })
+    };
+
+    var fetchDataToListTopInteractionsByBookFromLastMonth = function() {
+      if (! $scope.bothBusNameAndBookAreSelected()) return;
+
+      var lastMonth = dateOffsetByMonth(-1);
+      $scope.miscReportOptions = {year: lastMonth.getFullYear(), month: lastMonth.getMonth() + 1};
+      var promise = $http.get('http://localhost:5000/roi/topInteractions/' + $scope.businessName +'/' + $scope.book + '/' + lastMonth.getFullYear() + '/' + (lastMonth.getMonth() + 1));
       promise.success(function(data, status, headers, config) {
         console.log(data);
 
@@ -123,17 +170,25 @@ angular.module('yeomanTestDeleteMeApp')
 
     $scope.totalActionsChart = createColumnChart();
     $scope.totalImpressionsChart = createColumnChart();
+    $scope.impressionsByChannelAndBookChart = createColumnChart();
 
     $scope.$watch('businessName', function() {
       if ($scope.businessName === '') return;
-      // fetchDataToDrawTotalActionChart();
-      // fetchDataToDrawTotalImpressionChart();
-      fetchDataToListTopInteractionsByBook();
+
+      fetchDataToDrawTotalActionChart();
+      fetchDataToDrawTotalImpressionChart();
+      fetchDataToListTopInteractionsByBookFromLastMonth();
+      fetchDataToDrawImpressionsByChannelAndBookChartFromLastMonth();
     });
 
     $scope.$watch('book', function() {
       if ($scope.book === '') return;
+      
+      fetchDataToListTopInteractionsByBookFromLastMonth();
+      fetchDataToDrawImpressionsByChannelAndBookChartFromLastMonth();
+    });
 
-      fetchDataToListTopInteractionsByBook();
-    })
+    $scope.bothBusNameAndBookAreSelected = function() {
+      return $scope.book && $scope.businessName;
+    }
   }]);

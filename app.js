@@ -24,7 +24,8 @@ app.get('/roi/top10actions', roi.getTop10BusinessWithMostActions);
 app.get('/roi/10RandomBusinessNames', roi.getTenRandomBusinessNames);
 app.get('/roi/allActions/:businessName', roi.getAllActionsForBusiness);
 app.get('/roi/allImpressions/:businessName', roi.getAllImpressionsForBusiness);
-app.get('/roi/topInteractions/:businessName/:book', roi.getTopInteractionWithChannelForBusinessByBook);
+app.get('/roi/topInteractions/:businessName/:book/:year/:month', roi.getTopInteractionWithChannelForBusinessByBook);
+app.get('/roi/impressionsByBook/:businessName/:book/:year/:month', roi.getImpressionsByBook);
 
 
 var port = process.env.PORT || 5000;

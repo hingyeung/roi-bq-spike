@@ -74,15 +74,19 @@ var bigQueryCallback = function(res) {
 };
 
 exports.getTopInteractionWithChannelForBusinessByBook = function(req, res) {
-  var businessName = req.params.businessName;
-  var book = req.params.book;
-  var query = 'select channel, action, count(action) as action_count ' +
-    ' from fake_roi_data.actions ' +
-    ' where business = "' + businessName + '" and ' +
-    ' book = "' + book + '" ' +
-    ' group by channel, action ' +
-    ' order by action_count desc ' +
-    ' limit 15 ';
+  var businessName = req.params.businessName
+    , book = req.params.book
+    , year = req.params.year
+    , month = req.params.month
+    , query = 'select channel, action, count(action) as action_count ' +
+      ' from fake_roi_data.actions ' +
+      ' where business = "' + businessName + '"' +
+      ' and book = "' + book + '" ' +
+      ' and year = ' + year + ' ' +
+      ' and month = ' + month + ' ' +
+      ' group by channel, action ' +
+      ' order by action_count desc ' +
+      ' limit 15 ';
   console.log(query);
 
   bqClient.jobs.query({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
@@ -98,6 +102,21 @@ exports.getAllImpressionsForBusiness = function(req, res) {
   console.log(query);
 
   bqClient.jobs.query({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
+}
+
+exports.getImpressionsByBook = function(req, res) {
+  var businessName = req.params.businessName
+    , book = req.params.book
+    , year = req.params.year
+    , month = req.params.month
+    , query = 'select channel, count(channel) as impression_count ' +
+        ' from fake_roi_data.search_impressions, fake_roi_data.direct_impressions ' +
+        ' where business = "' + businessName + '" ' +
+        ' and year = ' + year + ' and month = ' + month + ' ' +
+        ' group by channel';
+    console.log(query);
+
+    bqClient.jobs.query({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
 }
 
 exports.getAllActionsForBusiness = function(req, res) {
