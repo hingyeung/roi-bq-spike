@@ -1,0 +1,47 @@
+35a36,71
+>         syncQuery: function(options, cb) {
+>             var projId = options.projId,
+>                 query = options.query,
+>                 url = '/projects/' + projId + '/queries',
+>                 queryRequest = {
+>                     kind: "bigquery#queryRequest",
+>                     query: query,
+>                     // dryRun: true,
+>                     useQueryCache: true
+>                 };
+> 
+>             post(url, queryRequest, function(err, queryResponse) {
+>                 if ( err ) {
+>                     cb(err);
+>                     return;
+>                 }
+> 
+>                 var list = [];
+>                 for( var rowIndex in queryResponse.rows ) {
+>                     var item = {};
+>                     for( var fieldIndex in queryResponse.schema.fields ) {
+>                         item[queryResponse.schema.fields[fieldIndex].name] = queryResponse.rows[rowIndex].f[fieldIndex].v;
+>                     }
+>                     list.push(item);
+>                 }
+>                 console.log(queryResponse);
+> 
+>                 var bqResp = {
+>                     query: options.query,
+>                     totalBytesProcessed: queryResponse.totalBytesProcessed,
+>                     list: list
+>                 };
+> 
+>                 cb(null, bqResp);
+>             });
+>         },
+80c116,122
+<                     cb(null, list);
+---
+>                     var bqResp = {
+>                         query: options.query,
+>                         totalBytesProcessed: results.totalBytesProcessed,
+>                         list: list
+>                     };
+> 
+>                     cb(null, bqResp);

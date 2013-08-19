@@ -40,7 +40,7 @@ exports.listDatasets = function(req, res){
 };
 
 exports.getTop10BusinessWithMostActions = function(req, res) {
-  bqClient.jobs.query({projId: ROI_PROJECT_ID, query: 'SELECT  repository.url FROM [publicdata:samples.github_nested] LIMIT 10;'}, function(err, resp) {
+  bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: 'SELECT  repository.url FROM [publicdata:samples.github_nested] LIMIT 10;'}, function(err, resp) {
     if (err) { return console.log(err); }
     console.log(resp);
     res.send('Done');
@@ -55,10 +55,10 @@ exports.getTenRandomBusinessNames = function(req, res) {
   res.send(names);
 };
 
-exports.getAllImpressions = function(req, res) {
-  var bussines = req.params.businessName;
-  var query = "SELECT business, count(*) as impression_count from [large_fake_roi_data.direct_impressions, large_fake_roi_data.search_impressions] WHERE business = " + business + " AND year = 2013 AND month = 8 GROUP BY business"
-};
+// exports.getAllImpressions = function(req, res) {
+//   var bussines = req.params.businessName;
+//   var query = "SELECT business, count(*) as impression_count from [large_fake_roi_data.direct_impressions, large_fake_roi_data.search_impressions] WHERE business = " + business + " AND year = 2013 AND month = 8 GROUP BY business"
+// };
 
 var bigQueryCallback = function(res) {
   return function(err, resp) {
@@ -69,7 +69,7 @@ var bigQueryCallback = function(res) {
     }
     console.log(resp);
     res.contentType('application/json');
-    res.send(resp);
+    res.send(resp.list);
   };
 };
 
@@ -89,7 +89,7 @@ exports.getTopInteractionWithChannelForBusinessByBook = function(req, res) {
       ' limit 15 ';
   console.log(query);
 
-  bqClient.jobs.query({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
+  bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
 }
 
 exports.getAllImpressionsForBusiness = function(req, res) {
@@ -101,7 +101,7 @@ exports.getAllImpressionsForBusiness = function(req, res) {
     ' order by year,month';
   console.log(query);
 
-  bqClient.jobs.query({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
+  bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
 }
 
 exports.getImpressionsByBook = function(req, res) {
@@ -116,7 +116,7 @@ exports.getImpressionsByBook = function(req, res) {
         ' group by channel';
     console.log(query);
 
-    bqClient.jobs.query({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
+    bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
 }
 
 exports.getAllActionsForBusiness = function(req, res) {
@@ -128,5 +128,10 @@ exports.getAllActionsForBusiness = function(req, res) {
   ' ORDER BY year, month';
   console.log(query);
 
-  bqClient.jobs.query({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
+  bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
+};
+
+exports.getActionCount = function(req, res) {
+  var query = 'SELECT count(*) from fake_roi_data.actions';
+  bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
 };
