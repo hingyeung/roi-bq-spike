@@ -57,7 +57,7 @@ exports.getTenRandomBusinessNames = function(req, res) {
 
 exports.getAllImpressions = function(req, res) {
   var bussines = req.params.businessName;
-  var query = "SELECT business, count(*) as impression_count from [fake_roi_data.direct_impressions, fake_roi_data.search_impressions] WHERE business = " + business + " AND year = 2013 AND month = 8 GROUP BY business"
+  var query = "SELECT business, count(*) as impression_count from [large_fake_roi_data.direct_impressions, large_fake_roi_data.search_impressions] WHERE business = " + business + " AND year = 2013 AND month = 8 GROUP BY business"
 };
 
 var bigQueryCallback = function(res) {
@@ -79,7 +79,7 @@ exports.getTopInteractionWithChannelForBusinessByBook = function(req, res) {
     , year = req.params.year
     , month = req.params.month
     , query = 'select channel, action, count(action) as action_count ' +
-      ' from fake_roi_data.actions ' +
+      ' from large_fake_roi_data.actions ' +
       ' where business = "' + businessName + '"' +
       ' and book = "' + book + '" ' +
       ' and year = ' + year + ' ' +
@@ -95,7 +95,7 @@ exports.getTopInteractionWithChannelForBusinessByBook = function(req, res) {
 exports.getAllImpressionsForBusiness = function(req, res) {
   var businessName = req.params.businessName;
   var query = 'select year,month,count(*) as impression_count ' +
-    ' from fake_roi_data.direct_impressions,fake_roi_data.search_impressions ' +
+    ' from large_fake_roi_data.direct_impressions,large_fake_roi_data.search_impressions ' +
     ' where business ="' + businessName + '"' +
     ' group by year,month ' +
     ' order by year,month';
@@ -110,7 +110,7 @@ exports.getImpressionsByBook = function(req, res) {
     , year = req.params.year
     , month = req.params.month
     , query = 'select channel, count(channel) as impression_count ' +
-        ' from fake_roi_data.search_impressions, fake_roi_data.direct_impressions ' +
+        ' from large_fake_roi_data.search_impressions, large_fake_roi_data.direct_impressions ' +
         ' where business = "' + businessName + '" ' +
         ' and year = ' + year + ' and month = ' + month + ' ' +
         ' group by channel';
@@ -121,7 +121,7 @@ exports.getImpressionsByBook = function(req, res) {
 
 exports.getAllActionsForBusiness = function(req, res) {
   var businessName = req.params.businessName,
-  query = 'SELECT year, month, count(action) as action_count from [fake_roi_data.actions] ' +
+  query = 'SELECT year, month, count(action) as action_count from [large_fake_roi_data.actions] ' +
   ' WHERE business = "' + businessName + '"' +
   ' AND timestamp < CURRENT_TIMESTAMP() and timestamp > DATE_ADD(timestamp, -6, "MONTH")' +
   ' GROUP BY year, month' +
