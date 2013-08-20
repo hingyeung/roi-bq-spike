@@ -69,7 +69,7 @@ var bigQueryCallback = function(res) {
     }
     console.log(resp);
     res.contentType('application/json');
-    res.send(resp.list);
+    res.send(resp);
   };
 };
 

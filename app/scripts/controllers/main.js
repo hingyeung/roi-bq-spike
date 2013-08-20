@@ -1,6 +1,45 @@
 'use strict';
 
 angular.module('yeomanTestDeleteMeApp')
+  .directive('collapsableChartDetails', function($compile) {
+    // return the directive link function.
+    var linker = function(scope, element, attrs) {
+
+    };
+
+    return {
+      restrict: 'E',
+      replace: true,
+      link: linker,
+      templateUrl: '/views/collapsableChartDetail.html',
+      scope: {
+        // one way bind
+        data:"&data"
+      }
+    };
+  })
+  .filter('capacity', function() {
+    var KILO = 1024
+      , MEGA = 1024 * KILO
+      , GIGA = 1024 * MEGA;
+    return function(inputInBytes, unit) {
+      var result;
+      switch (unit) {
+        case 'GB':
+          result = inputInBytes / GIGA;
+          break;
+        case 'MB':
+          result = inputInBytes / MEGA;
+          break;
+        case 'KB':
+          result = inputInBytes / KILO;
+          break;
+        default:
+          result = inputInBytes / KILO;
+      }
+      return (result).toFixed(3);
+    };
+  })
   .controller('MainCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.businessName = "";
     $scope.book= "";
@@ -32,7 +71,8 @@ angular.module('yeomanTestDeleteMeApp')
           "vAxis": {
             "title": "Actions"
           }
-        }
+        },
+        "isDetailsCollapsed": true
       };
     };
 
@@ -44,7 +84,8 @@ angular.module('yeomanTestDeleteMeApp')
 
     var fetchDataToDrawTotalActionChart = function() {
       var promise = $http.get('http://localhost:5000/roi/allActions/' + $scope.businessName);
-      promise.success(function(data, status, headers, config) {
+      promise.success(function(resp, status, headers, config) {
+        var data = resp.list;
         console.log(data);
         $scope.totalActionsChart.options.title = "Total interactions for " + $scope.businessName;
 
@@ -68,6 +109,8 @@ angular.module('yeomanTestDeleteMeApp')
 
         $scope.totalActionsChart.data.rows = rows;
         $scope.totalActionsChart.data.cols = cols;
+        $scope.totalActionsChart.totalBytesProcessed = resp.totalBytesProcessed;
+        $scope.totalActionsChart.query = resp.query;
       }).error(function(data, status, headers, config) {
         console.log('Failed to download total actions.');
       });
@@ -81,7 +124,8 @@ angular.module('yeomanTestDeleteMeApp')
       var lastMonth = dateOffsetByMonth(-1)
         , promise = $http.get('http://localhost:5000/roi/impressionsByBook/' + $scope.businessName +'/' + $scope.book + '/' + lastMonth.getFullYear() + '/' + (lastMonth.getMonth() + 1));
       
-      promise.success(function(data, status, headers, config) {
+      promise.success(function(resp, status, headers, config) {
+        var data = resp.list;
         console.log(data);
 
         $scope.impressionsByChannelAndBookChart.options.vAxis.title = "Impressions";
@@ -106,6 +150,8 @@ angular.module('yeomanTestDeleteMeApp')
 
         $scope.impressionsByChannelAndBookChart.data.cols = cols;
         $scope.impressionsByChannelAndBookChart.data.rows = rows;
+        $scope.impressionsByChannelAndBookChart.totalBytesProcessed = resp.totalBytesProcessed;
+        $scope.impressionsByChannelAndBookChart.query = resp.query;
       }).error(function(data, status, headers, config) {
         console.log('Failed to download impressions by book');
       })
@@ -117,7 +163,8 @@ angular.module('yeomanTestDeleteMeApp')
       var lastMonth = dateOffsetByMonth(-1);
       $scope.miscReportOptions = {year: lastMonth.getFullYear(), month: lastMonth.getMonth() + 1};
       var promise = $http.get('http://localhost:5000/roi/topInteractions/' + $scope.businessName +'/' + $scope.book + '/' + lastMonth.getFullYear() + '/' + (lastMonth.getMonth() + 1));
-      promise.success(function(data, status, headers, config) {
+      promise.success(function(resp, status, headers, config) {
+        var data = resp.list;
         console.log(data);
 
         $scope.topInteractionsByBook = data;
@@ -128,7 +175,8 @@ angular.module('yeomanTestDeleteMeApp')
 
     var fetchDataToDrawTotalImpressionChart = function() {
       var promise = $http.get('http://localhost:5000/roi/allImpressions/' + $scope.businessName);
-      promise.success(function(data, status, headers, config) {
+      promise.success(function(resp, status, headers, config) {
+        var data = resp.list;
         console.log(data);
         $scope.totalImpressionsChart.options.title = "Total impressions for " + $scope.businessName;
         $scope.totalImpressionsChart.options.vAxis.title = "Impressions";
@@ -154,6 +202,8 @@ angular.module('yeomanTestDeleteMeApp')
 
         $scope.totalImpressionsChart.data.rows = rows;
         $scope.totalImpressionsChart.data.cols = cols;
+        $scope.totalImpressionsChart.totalBytesProcessed = resp.totalBytesProcessed;
+        $scope.totalImpressionsChart.query = resp.query;
 
       }).error(function(data, status, headers, config) {
         console.log('Failed to download total impressions.');

@@ -15,22 +15,20 @@
     <form class="">
       <label>Book</label>
       <select ng-model="book">
-        <option value="BOOK1">BOOK1</option>
-        <option value="BOOK1">BOOK2</option>
-        <option value="BOOK1">BOOK3</option>
-        <option value="BOOK1">BOOK4</option>
+        <option ng-repeat="b in [0,1,2,3,4,5,6,7,8,9,10]" value="BOOK{{b}}">BOOK{{b}}</option>
       </select>
     </form>
   </div>
 </div>
 
-<!--style="{{totalActionsChart.cssStyle}}"-->
 <div class="row-fluid">
   <div  class="span6">
     <div google-chart chart="totalActionsChart" />
+    <collapsable-chart-details data="totalActionsChart"></collapsable-chart-details>
   </div>
   <div  class="span6">
     <div google-chart chart="totalImpressionsChart" />
+    <collapsable-chart-details data="totalImpressionsChart"></collapsable-chart-details>
   </div>
 </div>
 
@@ -52,6 +50,7 @@
   </div>
   <div class="span6">
     <div google-chart chart="impressionsByChannelAndBookChart" />
+    <collapsable-chart-details data="impressionsByChannelAndBookChart"></collapsable-chart-details>
   </div>
 </div>
 

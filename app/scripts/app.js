@@ -5,7 +5,7 @@ google.setOnLoadCallback(function () {
 });
 google.load('visualization', '1', {packages: ['corechart']});
 
-angular.module('yeomanTestDeleteMeApp', ['googlechart.directives'])
+angular.module('yeomanTestDeleteMeApp', ['googlechart.directives', 'ui.bootstrap'])
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
