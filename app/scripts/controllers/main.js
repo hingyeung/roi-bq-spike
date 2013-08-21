@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('yeomanTestDeleteMeApp')
+angular.module('roiBigQuerySpike')
   .directive('collapsableChartDetails', function($compile) {
     // return the directive link function.
     var linker = function(scope, element, attrs) {

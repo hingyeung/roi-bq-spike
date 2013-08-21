@@ -3,7 +3,7 @@
 describe('Controller: MainCtrl', function () {
 
   // load the controller's module
-  beforeEach(module('yeomanTestDeleteMeApp'));
+  beforeEach(module('roiBigQuerySpike'));
 
   var MainCtrl,
     scope;

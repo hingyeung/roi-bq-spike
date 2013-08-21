@@ -1,11 +1,11 @@
 'use strict';
 
 google.setOnLoadCallback(function () {
-    angular.bootstrap(document.body, ['yeomanTestDeleteMeApp']);
+    angular.bootstrap(document.body, ['roiBigQuerySpike']);
 });
 google.load('visualization', '1', {packages: ['corechart']});
 
-angular.module('yeomanTestDeleteMeApp', ['googlechart.directives', 'ui.bootstrap'])
+angular.module('roiBigQuerySpike', ['googlechart.directives', 'ui.bootstrap'])
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
