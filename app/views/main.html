@@ -32,16 +32,16 @@
   </div>
 </div>
 
+<h2>Book Interaction Reports</h2>
 <div class="row-fluid">
   <div class="span6">
     <table class="table table-bordered table-striped table-condensed table-hover" ng-show="bothBusNameAndBookAreSelected()">
       <thead>
-        <caption><strong>Top Interactions for {{businessName}} in {{miscReportOptions.month}}/{{miscReportOptions.year}}</strong></caption>
-        <tr><th>Channel</th><th>Interaction</th><th>Count</th>
+        <caption><strong>Interactions for {{businessName}} in {{miscReportOptions.month}}/{{miscReportOptions.year}}</strong></caption>
+        <tr><th>Interaction</th><th>Count</th>
       </thead>
       <tbody>
-        <tr ng-repeat="interaction in topInteractionsByBook">
-          <td>{{interaction.channel}}</td>
+        <tr ng-repeat="interaction in interactionsByBook">
           <td>{{interaction.action}}</td>
           <td>{{interaction.action_count}}</td>
         </tr>
@@ -53,4 +53,3 @@
     <collapsable-chart-details data="impressionsByChannelAndBookChart"></collapsable-chart-details>
   </div>
 </div>
-

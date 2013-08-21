@@ -73,20 +73,37 @@ var bigQueryCallback = function(res) {
   };
 };
 
-exports.getTopInteractionWithChannelForBusinessByBook = function(req, res) {
+// exports.getTopInteractionWithChannelForBusinessByBook = function(req, res) {
+//   var businessName = req.params.businessName
+//     , book = req.params.book
+//     , year = req.params.year
+//     , month = req.params.month
+//     , query = 'select channel, action, count(action) as action_count ' +
+//       ' from large_fake_roi_data.actions ' +
+//       ' where business = "' + businessName + '"' +
+//       ' and book = "' + book + '" ' +
+//       ' and year = ' + year + ' ' +
+//       ' and month = ' + month + ' ' +
+//       ' group by channel, action ' +
+//       ' order by action_count desc ' +
+//       ' limit 15 ';
+//   console.log(query);
+
+//   bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
+// }
+
+exports.getInteractionForBusinessByBook = function(req, res) {
   var businessName = req.params.businessName
     , book = req.params.book
     , year = req.params.year
     , month = req.params.month
-    , query = 'select channel, action, count(action) as action_count ' +
+    , query = 'select action, count(action) as action_count ' +
       ' from large_fake_roi_data.actions ' +
       ' where business = "' + businessName + '"' +
       ' and book = "' + book + '" ' +
       ' and year = ' + year + ' ' +
       ' and month = ' + month + ' ' +
-      ' group by channel, action ' +
-      ' order by action_count desc ' +
-      ' limit 15 ';
+      ' group by action ';
   console.log(query);
 
   bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));

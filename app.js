@@ -27,6 +27,8 @@ app.get('/roi/allImpressions/:businessName', roi.getAllImpressionsForBusiness);
 app.get('/roi/topInteractions/:businessName/:book/:year/:month', roi.getTopInteractionWithChannelForBusinessByBook);
 app.get('/roi/impressionsByBook/:businessName/:book/:year/:month', roi.getImpressionsByBook);
 app.get('/roi/getActionCount', roi.getActionCount);
+// book interaction reports
+app.get('/roi/interactionsByBook/:businessName/:book/:year/:month', roi.getInteractionForBusinessByBook);
 
 
 var port = process.env.PORT || 5000;
