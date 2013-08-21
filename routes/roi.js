@@ -90,7 +90,7 @@ var bigQueryCallback = function(res) {
 //   console.log(query);
 
 //   bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
-// }
+// };
 
 exports.getInteractionForBusinessByBook = function(req, res) {
   var businessName = req.params.businessName
@@ -107,7 +107,7 @@ exports.getInteractionForBusinessByBook = function(req, res) {
   console.log(query);
 
   bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
-}
+};
 
 exports.getAllImpressionsForBusiness = function(req, res) {
   var businessName = req.params.businessName;
