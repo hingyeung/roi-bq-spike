@@ -20,7 +20,6 @@ app.get('/', function(request, response) {
   response.render('index.html')
 });
 app.get('/roi/list/datasets', roi.listDatasets);
-app.get('/roi/top10actions', roi.getTop10BusinessWithMostActions);
 app.get('/roi/10RandomBusinessNames', roi.getTenRandomBusinessNames);
 app.get('/roi/allActions/:businessName', roi.getAllActionsForBusiness);
 app.get('/roi/allImpressions/:businessName', roi.getAllImpressionsForBusiness);
@@ -29,6 +28,7 @@ app.get('/roi/impressionsByBook/:businessName/:book/:year/:month', roi.getImpres
 app.get('/roi/getActionCount', roi.getActionCount);
 // book interaction reports
 app.get('/roi/interactionsByBook/:businessName/:book/:year/:month', roi.getInteractionForBusinessByBook);
+app.get('/roi/interactionsByBook/:businessName/:book', roi.getRecentInteractionsForBusinessByBook)
 
 
 var port = process.env.PORT || 5000;

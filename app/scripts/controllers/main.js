@@ -1,47 +1,47 @@
 'use strict';
 
 angular.module('roiBigQuerySpike')
-  .controller('MainCtrl', ['$scope', '$http', function ($scope, $http) {
+  .controller('MainCtrl', ['$scope', '$http', 'Roiservice', function ($scope, $http, Roiservice) {
     $scope.businessName = "";
     $scope.book= "";
     $scope.businessNames = [];
     $scope.miscReportOptions = {year: 0, month: 0};
 
-    var createColumnChart = function() {
-      return {
-        "type": "ColumnChart",
-        "displayed": true,
-        "cssStyle": "height:600px; width:100%;",
-        "data": {},
-        "options": {
-          "legend": {"position": "none"},
-          "title": "",
-          "isStacked": "true",
-          "fill": 20,
-          "displayExactValues": true,
-          "hAxis": {
-            "title": "Date",
-            "gridlines": {
-              "count": 10
-            }
-          },
-          "animation":{
-            "duration": 1000,
-            "easing": 'out',
-          },
-          "vAxis": {
-            "title": "Actions"
-          }
-        },
-        "isDetailsCollapsed": true
-      };
-    };
+    // var createColumnChart = function() {
+    //   return {
+    //     "type": "ColumnChart",
+    //     "displayed": true,
+    //     "cssStyle": "height:600px; width:100%;",
+    //     "data": {},
+    //     "options": {
+    //       "legend": {"position": "none"},
+    //       "title": "",
+    //       "isStacked": "true",
+    //       "fill": 20,
+    //       "displayExactValues": true,
+    //       "hAxis": {
+    //         "title": "Date",
+    //         "gridlines": {
+    //           "count": 10
+    //         }
+    //       },
+    //       "animation":{
+    //         "duration": 1000,
+    //         "easing": 'out',
+    //       },
+    //       "vAxis": {
+    //         "title": "Actions"
+    //       }
+    //     },
+    //     "isDetailsCollapsed": true
+    //   };
+    // };
 
     var dateOffsetByMonth = function(offset) {
       var newDate = new Date();
       newDate.setMonth(newDate.getMonth() + offset);
       return newDate;
-    }
+    };
 
     var fetchDataToDrawTotalActionChart = function() {
       var promise = $http.get('http://localhost:5000/roi/allActions/' + $scope.businessName);
@@ -134,6 +134,7 @@ angular.module('roiBigQuerySpike')
     //   });
     // };
 
+    // Book Interaction Report (already moved to bookInteraction controller)
     var fetchDataToListInteractionsByBookFromLastMonth = function() {
       if (! $scope.bothBusNameAndBookAreSelected()) return;
 
@@ -146,9 +147,11 @@ angular.module('roiBigQuerySpike')
 
         $scope.interactionsByBook = data;
       }).error(function(data, status, headers, config) {
-        console.log('Failed to download top interactions');
+        console.log('Failed to download monthly interactions');
       });
     };
+
+    
 
     var fetchDataToDrawTotalImpressionChart = function() {
       var promise = $http.get('http://localhost:5000/roi/allImpressions/' + $scope.businessName);
@@ -187,7 +190,8 @@ angular.module('roiBigQuerySpike')
       });
     };
 
-    var promise = $http.get('http://localhost:5000/roi/10RandomBusinessNames');
+    // var promise = $http.get('http://localhost:5000/roi/10RandomBusinessNames');
+    var promise = Roiservice.get10RandomBusinessNames();
     promise.success(function(data, status, headers, config) {
       $scope.businessNames = data;
     }).error(function(data, status, headers, config) {
@@ -195,9 +199,9 @@ angular.module('roiBigQuerySpike')
       console.log('Failed to download business names');
     });
 
-    $scope.totalActionsChart = createColumnChart();
-    $scope.totalImpressionsChart = createColumnChart();
-    $scope.impressionsByChannelAndBookChart = createColumnChart();
+    $scope.totalActionsChart = Roiservice.makeChartData('ColumnChart');
+    $scope.totalImpressionsChart = Roiservice.makeChartData('ColumnChart');
+    $scope.impressionsByChannelAndBookChart = Roiservice.makeChartData('ColumnChart');
 
     $scope.$watch('businessName', function() {
       if ($scope.businessName === '') return;

@@ -3,6 +3,7 @@ var https = require('https')
   , fs = require('fs')
   , bigquery = require('google-bigquery')
   , ROI_PROJECT_ID = 'samuelli.net:roispike'
+  , DATA_SET = 'fake_roi_data'
   , bqClient = bigquery({
         "iss": '361723984999@developer.gserviceaccount.com',
         "key": fs.readFileSync('roi-spike-privatekey.pem', 'utf8')
@@ -39,14 +40,6 @@ exports.listDatasets = function(req, res){
   });
 };
 
-exports.getTop10BusinessWithMostActions = function(req, res) {
-  bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: 'SELECT  repository.url FROM [publicdata:samples.github_nested] LIMIT 10;'}, function(err, resp) {
-    if (err) { return console.log(err); }
-    console.log(resp);
-    res.send('Done');
-  });
-};
-
 exports.getTenRandomBusinessNames = function(req, res) {
   var names = [];
   for (var idx = 0; idx < 10; idx++) {
@@ -57,14 +50,15 @@ exports.getTenRandomBusinessNames = function(req, res) {
 
 // exports.getAllImpressions = function(req, res) {
 //   var bussines = req.params.businessName;
-//   var query = "SELECT business, count(*) as impression_count from [large_fake_roi_data.direct_impressions, large_fake_roi_data.search_impressions] WHERE business = " + business + " AND year = 2013 AND month = 8 GROUP BY business"
+//   var query = "SELECT business, count(*) as impression_count from [' + DATA_SET + '.direct_impressions, ' + DATA_SET + '.search_impressions] WHERE business = " + business + " AND year = 2013 AND month = 8 GROUP BY business"
 // };
 
 var bigQueryCallback = function(res) {
   return function(err, resp) {
     if (err) {
       console.log(err);
-      res.send('Error');
+      res.contentType('application/json');
+      res.send(err);
       return;
     }
     console.log(resp);
@@ -79,7 +73,7 @@ var bigQueryCallback = function(res) {
 //     , year = req.params.year
 //     , month = req.params.month
 //     , query = 'select channel, action, count(action) as action_count ' +
-//       ' from large_fake_roi_data.actions ' +
+//       ' from ' + DATA_SET + '.actions ' +
 //       ' where business = "' + businessName + '"' +
 //       ' and book = "' + book + '" ' +
 //       ' and year = ' + year + ' ' +
@@ -93,12 +87,13 @@ var bigQueryCallback = function(res) {
 // };
 
 exports.getInteractionForBusinessByBook = function(req, res) {
+  console.log('getInteractionForBusinessByBook');
   var businessName = req.params.businessName
     , book = req.params.book
     , year = req.params.year
     , month = req.params.month
     , query = 'select action, count(action) as action_count ' +
-      ' from large_fake_roi_data.actions ' +
+      ' from ' + DATA_SET + '.actions ' +
       ' where business = "' + businessName + '"' +
       ' and book = "' + book + '" ' +
       ' and year = ' + year + ' ' +
@@ -109,10 +104,25 @@ exports.getInteractionForBusinessByBook = function(req, res) {
   bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
 };
 
+exports.getRecentInteractionsForBusinessByBook = function(req, res) {
+  console.log('getRecentInteractionsForBusinessByBook');
+  var businessName = req.params.businessName
+    , book = req.params.book
+    , query = 'SELECT year, month, action, count(action) as action_count from [' + DATA_SET + '.actions]' +
+    ' WHERE business = "' + businessName + '" ' +
+    ' AND book = "' + book + '" ' +
+    ' AND timestamp < CURRENT_TIMESTAMP() and timestamp > DATE_ADD(timestamp, -6, "MONTH") ' +
+    ' GROUP BY year, month, action ' +
+    ' ORDER BY year, month';
+  console.log(query);
+
+  bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
+};
+
 exports.getAllImpressionsForBusiness = function(req, res) {
   var businessName = req.params.businessName;
   var query = 'select year,month,count(*) as impression_count ' +
-    ' from large_fake_roi_data.direct_impressions,large_fake_roi_data.search_impressions ' +
+    ' from ' + DATA_SET + '.direct_impressions,' + DATA_SET + '.search_impressions ' +
     ' where business ="' + businessName + '"' +
     ' group by year,month ' +
     ' order by year,month';
@@ -127,7 +137,7 @@ exports.getImpressionsByBook = function(req, res) {
     , year = req.params.year
     , month = req.params.month
     , query = 'select channel, count(channel) as impression_count ' +
-        ' from large_fake_roi_data.search_impressions, large_fake_roi_data.direct_impressions ' +
+        ' from ' + DATA_SET + '.search_impressions, ' + DATA_SET + '.direct_impressions ' +
         ' where business = "' + businessName + '" ' +
         ' and year = ' + year + ' and month = ' + month + ' ' +
         ' group by channel';
@@ -138,7 +148,7 @@ exports.getImpressionsByBook = function(req, res) {
 
 exports.getAllActionsForBusiness = function(req, res) {
   var businessName = req.params.businessName,
-  query = 'SELECT year, month, count(action) as action_count from [large_fake_roi_data.actions] ' +
+  query = 'SELECT year, month, count(action) as action_count from [' + DATA_SET + '.actions] ' +
   ' WHERE business = "' + businessName + '"' +
   ' AND timestamp < CURRENT_TIMESTAMP() and timestamp > DATE_ADD(timestamp, -6, "MONTH")' +
   ' GROUP BY year, month' +
