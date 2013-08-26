@@ -37,7 +37,7 @@ angular.module('roiBigQuerySpike')
             "title": "Actions"
           }
         },
-        "isDetailsCollapsed": true
+        "isDetailsExpanded": false
       };
     };
 
