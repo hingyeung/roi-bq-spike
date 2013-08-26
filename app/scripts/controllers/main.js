@@ -48,6 +48,7 @@ angular.module('roiBigQuerySpike')
       promise.success(function(resp, status, headers, config) {
         var data = resp.list;
         console.log(data);
+        $scope.totalActionsChart = Roiservice.makeChartData("ColumnChart");
         $scope.totalActionsChart.options.title = "Total interactions for " + $scope.businessName;
 
         var cols = [{
@@ -89,6 +90,7 @@ angular.module('roiBigQuerySpike')
         var data = resp.list;
         console.log(data);
 
+        $scope.impressionsByChannelAndBookChart = Roiservice.makeChartData('ColumnChart');
         $scope.impressionsByChannelAndBookChart.options.vAxis.title = "Impressions";
         $scope.impressionsByChannelAndBookChart.options.hAxis.title = "Channel";
         $scope.impressionsByChannelAndBookChart.options.title = "Impressions for " + $scope.businessName + " in " + $scope.miscReportOptions.month + "/" + $scope.miscReportOptions.year;
@@ -158,6 +160,7 @@ angular.module('roiBigQuerySpike')
       promise.success(function(resp, status, headers, config) {
         var data = resp.list;
         console.log(data);
+        $scope.totalImpressionsChart = Roiservice.makeChartData("ColumnChart");
         $scope.totalImpressionsChart.options.title = "Total impressions for " + $scope.businessName;
         $scope.totalImpressionsChart.options.vAxis.title = "Impressions";
 
@@ -198,10 +201,6 @@ angular.module('roiBigQuerySpike')
       $scope.businessName = [];
       console.log('Failed to download business names');
     });
-
-    $scope.totalActionsChart = Roiservice.makeChartData('ColumnChart');
-    $scope.totalImpressionsChart = Roiservice.makeChartData('ColumnChart');
-    $scope.impressionsByChannelAndBookChart = Roiservice.makeChartData('ColumnChart');
 
     $scope.$watch('businessName', function() {
       if ($scope.businessName === '') return;
