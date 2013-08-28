@@ -8,14 +8,14 @@
 var ACTIONS = ['ACTION0', 'ACTION1', 'ACTION2'];
 
 angular.module('roiBigQuerySpike')
-  .controller('BookinteractionCtrl', ['$scope', '$http', 'Roiservice', function ($scope, $http, Roiservice) {
+  .controller('BookinteractionCtrl', ['$scope', 'Roiservice', function ($scope, Roiservice) {
 
     var fetchDataToListInteractionsByBookFromLastMonth = function() {
       if (! $scope.bothBusNameAndBookAreSelected()) return;
 
-      var lastMonth = dateOffsetByMonth(-1);
+      var lastMonth = Roiservice.dateOffsetByMonth(-1);
       $scope.miscReportOptions = {year: lastMonth.getFullYear(), month: lastMonth.getMonth() + 1};
-      var promise = $http.get('http://localhost:5000/roi/interactionsByBook/' + $scope.businessName +'/' + $scope.book + '/' + lastMonth.getFullYear() + '/' + (lastMonth.getMonth() + 1));
+      var promise = Roiservice.fetchActionsForBusinessByBook($scope.businessName, $scope.book, lastMonth.getFullYear(), lastMonth.getMonth());
       promise.success(function(resp, status, headers, config) {
         var data = resp.list;
         console.log(data);
@@ -118,13 +118,6 @@ angular.module('roiBigQuerySpike')
     // });
     // return only 1 busines name for debugging purpose
     $scope.businessNames = ['Sed Neque Inc.'];
-
-    // TODO: this block of code repeats in each controller
-    var dateOffsetByMonth = function(offset) {
-      var newDate = new Date();
-      newDate.setMonth(newDate.getMonth() + offset);
-      return newDate;
-    };
 
     var createEmptyActionCountRow = function() {
       var emptyRow = {};

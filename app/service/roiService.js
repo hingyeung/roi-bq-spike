@@ -2,6 +2,13 @@
 
 angular.module('roiBigQuerySpike')
   .service('Roiservice', ['$http', function Roiservice($http) {
+    // TODO: this block of code repeats in each controller
+    this.dateOffsetByMonth = function(offset) {
+      var newDate = new Date();
+      newDate.setMonth(newDate.getMonth() + offset);
+      return newDate;
+    };
+
     // AngularJS will instantiate a singleton by calling "new" on this function
     this.get10RandomBusinessNames = function() {
       return $http.get('http://localhost:5000/roi/10RandomBusinessNames');
@@ -9,7 +16,11 @@ angular.module('roiBigQuerySpike')
 
     this.fetchRecentActionsForBusinessByBook = function(businessName, book) {
       return $http.get('http://localhost:5000/roi/interactionsByBook/' + businessName + '/' + book);
-    }
+    };
+
+    this.fetchActionsForBusinessByBook = function(businessName, book, year, month) {
+      return $http.get('http://localhost:5000/roi/interactionsByBook/' + businessName +'/' + book + '/' + year + '/' + month);
+    };
 
     this.makeChartData = function(chartType) {
       return {
