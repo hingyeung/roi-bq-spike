@@ -28,7 +28,8 @@ app.get('/roi/impressionsByBook/:businessName/:book/:year/:month', roi.getImpres
 app.get('/roi/getActionCount', roi.getActionCount);
 // book interaction reports
 app.get('/roi/interactionsByBook/:businessName/:book/:year/:month', roi.getInteractionForBusinessByBook);
-app.get('/roi/interactionsByBook/:businessName/:book', roi.getRecentInteractionsForBusinessByBook)
+app.get('/roi/interactionsByBook/:businessName/:book', roi.getRecentInteractionsForBusinessByBook);
+app.get('/roi/impressionsPerChannelByBook/:businessName/:book/:year/:month', roi.getImpressionsPerChannelByBook);
 
 
 var port = process.env.PORT || 5000;

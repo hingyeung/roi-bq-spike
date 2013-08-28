@@ -149,7 +149,23 @@ exports.getImpressionsByBook = function(req, res) {
     console.log(query);
 
     bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
-}
+};
+
+exports.getImpressionsPerChannelByBook = function(req, res) {
+  var businessName = req.params.businessName
+    , book = req.params.book
+    , year = req.params.year
+    , month = req.params.month
+    , query = 'select channel, count(channel) as impression_count ' +
+        ' from ' + DATA_SET + '.search_impressions, ' + DATA_SET + '.direct_impressions ' +
+        ' where business = "' + businessName + '" ' +
+        ' and book = "' + book + '" ' +
+        ' and year = ' + year + ' and month = ' + month + ' ' +
+        ' group by channel';
+    console.log(query);
+
+    bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
+};
 
 exports.getAllActionsForBusiness = function(req, res) {
   var businessName = req.params.businessName,

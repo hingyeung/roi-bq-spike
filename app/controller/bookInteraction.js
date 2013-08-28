@@ -90,20 +90,22 @@ angular.module('roiBigQuerySpike')
       });
     };
 
+    // TODO: the following two watches are repeated in every controller
     $scope.$watch('businessName', function() {
-      if ($scope.businessName === '') return;
+      if (!$scope.book || !$scope.businessName) return;
 
       fetchDataToListInteractionsByBookFromLastMonth();
       fetchRecentActionsForBusinessByBook();
     });
 
     $scope.$watch('book', function() {
-      if ($scope.book === '') return;
+      if (!$scope.book || !$scope.businessName) return;
       
       fetchDataToListInteractionsByBookFromLastMonth();
       fetchRecentActionsForBusinessByBook();
     });
 
+    // TODO: this function is repeated in every controller
     $scope.bothBusNameAndBookAreSelected = function() {
       return $scope.book && $scope.businessName;
     };

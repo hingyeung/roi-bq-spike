@@ -15,24 +15,24 @@
   </div>
 </div>
 
-<h2>Book Interaction Reports</h2>
+<h2>Book Impression Reports</h2>
 <div class="row-fluid">
   <div class="span6">
     <table class="table table-bordered table-striped table-condensed table-hover" ng-show="bothBusNameAndBookAreSelected()">
       <thead>
-        <caption><strong>Interactions for {{businessName}} in {{miscReportOptions.month}}/{{miscReportOptions.year}} from {{book}}</strong></caption>
-        <tr><th>Interaction</th><th>Count</th>
+        <caption><strong>Impressions for {{businessName}} in {{miscReportOptions.month}}/{{miscReportOptions.year}} from {{book}}</strong></caption>
+        <tr><th>Channel</th><th>Count</th>
       </thead>
       <tbody>
-        <tr ng-repeat="interaction in interactionsByBook">
-          <td>{{interaction.action}}</td>
-          <td>{{interaction.action_count}}</td>
+        <tr ng-repeat="impressionPerChannel in impressionAndChannelByBook">
+          <td>{{impressionPerChannel.channel}}</td>
+          <td>{{impressionPerChannel.impression_count}}</td>
         </tr>
       </tbody>
     </table>
   </div>
-  <div class="span6">
+  <!-- <div class="span6">
     <div google-chart chart="impressionsByChannelAndBookChart" />
     <collapsable-chart-details data="impressionsByChannelAndBookChart"></collapsable-chart-details>
-  </div>
+  </div> -->
 </div>

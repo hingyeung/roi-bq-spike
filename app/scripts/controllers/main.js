@@ -117,7 +117,7 @@ angular.module('roiBigQuerySpike')
         $scope.impressionsByChannelAndBookChart.query = resp.query;
       }).error(function(data, status, headers, config) {
         console.log('Failed to download impressions by book');
-      })
+      });
     };
 
     // var fetchDataToListTopInteractionsByBookFromLastMonth = function() {
