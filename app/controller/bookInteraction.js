@@ -82,6 +82,7 @@ angular.module('roiBigQuerySpike')
         $scope.impressionsByChannelAndBookChart.options.title = "Total Interactions - 6 month summary";
         $scope.impressionsByChannelAndBookChart.query = resp.query;
         $scope.impressionsByChannelAndBookChart.totalBytesProcessed = resp.totalBytesProcessed;
+        $scope.impressionsByChannelAndBookChart.cacheHit = resp.cacheHit;
         // console.log($scope.impressionsByChannelAndBookChart.data);
 
       }).error(function(data, status, headers, config) {

@@ -1,4 +1,4 @@
-35a36,71
+35a36,72
 >         syncQuery: function(options, cb) {
 >             var projId = options.projId,
 >                 query = options.query,
@@ -27,6 +27,7 @@
 >                 console.log(queryResponse);
 > 
 >                 var bqResp = {
+>                     cacheHit: queryResponse.cacheHit,
 >                     query: options.query,
 >                     totalBytesProcessed: queryResponse.totalBytesProcessed,
 >                     list: list
@@ -35,7 +36,7 @@
 >                 cb(null, bqResp);
 >             });
 >         },
-80c116,122
+80c117,123
 <                     cb(null, list);
 ---
 >                     var bqResp = {

@@ -106,12 +106,21 @@ exports.getInteractionForBusinessByBook = function(req, res) {
 
 exports.getRecentInteractionsForBusinessByBook = function(req, res) {
   console.log('getRecentInteractionsForBusinessByBook');
+  var now = new Date()
+    , fromYear = now.getFullYear()
+    , fromMonth = now.getMonth() + 1
+    , toMonth = (fromMonth + 6) > 12 ? (fromMonth + 6) % 12 : fromMonth + 6
+    , toYear = (fromMonth + 6) > 12 ? fromYear + 1 : fromYear;
+  console.log('toYear: ' + toYear);
+  console.log('toMonth: ' + toMonth);
+
   var businessName = req.params.businessName
     , book = req.params.book
     , query = 'SELECT year, month, action, count(action) as action_count from [' + DATA_SET + '.actions]' +
     ' WHERE business = "' + businessName + '" ' +
     ' AND book = "' + book + '" ' +
-    ' AND timestamp < CURRENT_TIMESTAMP() and timestamp > DATE_ADD(timestamp, -6, "MONTH") ' +
+    ' AND timestamp >= TIMESTAMP("' + fromYear + '-' + fromMonth + '-01") ' +
+    ' AND timestamp < TIMESTAMP("' + toYear + '-' + (toMonth + 1) + '-01") ' +
     ' GROUP BY year, month, action ' +
     ' ORDER BY year, month';
   console.log(query);
