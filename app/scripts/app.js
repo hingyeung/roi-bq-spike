@@ -12,6 +12,10 @@ angular.module('roiBigQuerySpike', ['googlechart.directives', 'ui.bootstrap'])
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
+      .when('/v2', {
+        templateUrl: 'views/bookInteractions.html',
+        controller: 'Main2Ctrl'
+      })
       .when('/bookInteractions', {
         templateUrl: 'views/bookInteractions.html',
         controller: 'BookinteractionCtrl'
