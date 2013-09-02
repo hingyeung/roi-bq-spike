@@ -33,6 +33,7 @@ angular.module('roiBigQuerySpike')
         $scope.recentTotalImpressionsByBookChart.data = {rows: rows, cols: cols};
         $scope.recentTotalImpressionsByBookChart.query = resp.query;
         $scope.recentTotalImpressionsByBookChart.cacheHit = resp.cacheHit;
+        $scope.recentTotalImpressionsByBookChart.totalBytesProcessed = resp.totalBytesProcessed;
         $scope.recentTotalImpressionsByBookChart.options.title = 'Recent Appearences for ' + $scope.businessName + ' from ' + $scope.book;
       }).error(function(resp, status, headers, config) {
         console.log('Failed to download recent impressions by book');

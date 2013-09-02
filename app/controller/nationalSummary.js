@@ -17,8 +17,9 @@ angular.module('roiBigQuerySpike')
         $scope.recentTotalImpressionsChart.data = {rows: rows, cols: cols};
         $scope.recentTotalImpressionsChart.query = resp.query;
         $scope.recentTotalImpressionsChart.cacheHit = resp.cacheHit;
+        $scope.recentTotalImpressionsChart.totalBytesProcessed = resp.totalBytesProcessed;
         $scope.recentTotalImpressionsChart.options.title = 'Recent Appearences for ' + $scope.businessName;
-        $scope.lastMonthTotalImpressions = data[data.length - 1].impression_count;
+        $scope.lastMonthTotalImpressions = data.length > 0 ? data[data.length - 1].impression_count : 0
       }).error(function(resp, status, headers, config) {
         console.log('Failed to download recent impressions');
       });
@@ -28,7 +29,7 @@ angular.module('roiBigQuerySpike')
       var promise = Roiservice.fetchRecentInteractionsForBusiness($scope.businessName);
       promise.success(function(resp, status, headers, config) {
         var data = resp.list;
-        console.log(resp);
+        console.log(data);
         $scope.recentTotalInteractionsChart = Roiservice.makeChartData('ColumnChart');
         $scope.recentTotalInteractionsChart.options.vAxis.title = "Total Interactions";
         var cols = [{id: "date", label: "Date", type: "string"}, {id:"count", label:"Count", type:"number"}]
@@ -39,8 +40,9 @@ angular.module('roiBigQuerySpike')
         $scope.recentTotalInteractionsChart.data = {rows: rows, cols: cols};
         $scope.recentTotalInteractionsChart.query = resp.query;
         $scope.recentTotalInteractionsChart.cacheHit = resp.cacheHit;
+        $scope.recentTotalInteractionsChart.totalBytesProcessed = resp.totalBytesProcessed;
         $scope.recentTotalInteractionsChart.options.title = 'Recent Interactions for ' + $scope.businessName;
-        $scope.lastMonthTotalInteractions = data[data.length - 1].action_count;
+        $scope.lastMonthTotalInteractions = data.lenght > 0 ? data[data.length - 1].action_count : 0;
       }).error(function(resp, status, headers, config) {
         console.log('Failed to download recent interactions');
       });
