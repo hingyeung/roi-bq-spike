@@ -17,7 +17,7 @@
         <link rel="stylesheet" href="styles/main.css">
         <!-- endbuild -->
 </head>
-  <body ng-app="roiBigQuerySpike">
+  <body ng-app="roiBigQuerySpike" ng-controller="Main2Ctrl">
     <!--[if lt IE 7]>
       <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
     <![endif]-->
@@ -31,54 +31,46 @@
     <div class="navbar">
         <div class="page-header navbar-inner"><h1>ROI Spike <small>Powered by Google BigQuery</small></h1></div>
     </div>
+    <div class="row-fluid">
+      <div class="span6">
+        <form class="">
+          <label>Business</label>
+          <select ng-model="businessName" ng-options="busName for busName in businessNames"></select>
+        </form>
+      </div>
+      <div class="span6">
+        <form class="">
+          <label>Book</label>
+          <select ng-model="book">
+            <option ng-repeat="b in [0,1,2,3,4,5,6,7,8,9,10]" value="BOOK{{b}}">BOOK{{b}}</option>
+          </select>
+        </form>
+      </div>
+    </div>
     <div class="container" ng-view=""> </div>
-
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-    <!--script>
-      var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
-      (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-      g.src='//www.google-analytics.com/ga.js';
-      s.parentNode.insertBefore(g,s)}(document,'script'));
-    </script-->
 
     <script src="//www.google.com/jsapi"></script>
     <script src="bower_components/jquery/jquery.js"></script>
     <script src="bower_components/angular/angular.js"></script>
     <script src="scripts/ui-bootstrap-0.5.0.min.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <!-- build:js scripts/modules.js -->
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <!-- endbuild -->
 
-        <!-- build:js scripts/plugins.js -->
-        <!--script src="bower_components/bootstrap-sass/js/bootstrap-affix.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-alert.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-dropdown.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-tooltip.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-modal.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-transition.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-button.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-popover.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-typeahead.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-carousel.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-scrollspy.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-collapse.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-tab.js"></script-->
-        <!-- endbuild -->
-
-        <!-- build:js scripts/modules.js -->
-        <script src="bower_components/angular-resource/angular-resource.js"></script>
-        <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-        <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-        <!-- endbuild -->
-
-        <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="scripts/ng-google-chart.js"></script>
-        <script src="scripts/app.js"></script>
-        <script src="scripts/controllers/main.js"></script>
-        <script src="directive/collapsableChartDetails.js"></script>
-        <script src="filter/capacity.js"></script>
-        <script src="controller/bookInteraction.js"></script>
-        <script src="service/roiService.js"></script>
-        <script src="controller/bookImpression.js"></script>
-        <script src="controller/main.js"></script>
-        <script src="controller/nationalSummary.js"></script>
-        <!-- endbuild -->
-</body>
-</html>
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="scripts/ng-google-chart.js"></script>
+    <script src="scripts/app.js"></script>
+    <script src="scripts/controllers/main.js"></script>
+    <script src="directive/collapsableChartDetails.js"></script>
+    <script src="filter/capacity.js"></script>
+    <script src="controller/main.js"></script>
+    <script src="controller/bookInteraction.js"></script>
+    <script src="service/roiService.js"></script>
+    <script src="controller/bookImpression.js"></script>
+    <script src="controller/nationalSummary.js"></script>
+    <!-- endbuild -->
+  </body>
+  </html>
