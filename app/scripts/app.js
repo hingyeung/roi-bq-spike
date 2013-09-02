@@ -24,6 +24,10 @@ angular.module('roiBigQuerySpike', ['googlechart.directives', 'ui.bootstrap'])
         templateUrl: 'views/bookImpressions.html',
         controller: 'BookimpressionCtrl'
       })
+      .when('/nationalSummary', {
+        templateUrl: 'views/nationalSummary.html',
+        controller: 'NationalsummaryCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });

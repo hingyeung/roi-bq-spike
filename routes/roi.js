@@ -124,17 +124,17 @@ exports.getRecentInteractionsForBusinessByBook = function(req, res) {
   bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
 };
 
-exports.getAllRecentImpressionsForBusiness = function(req, res) {
-  var businessName = req.params.businessName;
-  var query = 'select year,month,count(*) as impression_count ' +
-    ' from ' + DATA_SET + '.direct_impressions,' + DATA_SET + '.search_impressions ' +
-    ' where business ="' + businessName + '"' +
-    ' group by year,month ' +
-    ' order by year,month';
-  console.log(query);
+// exports.getAllRecentImpressionsForBusiness = function(req, res) {
+//   var businessName = req.params.businessName;
+//   var query = 'select year,month,count(*) as impression_count ' +
+//     ' from ' + DATA_SET + '.direct_impressions,' + DATA_SET + '.search_impressions ' +
+//     ' where business ="' + businessName + '"' +
+//     ' group by year,month ' +
+//     ' order by year,month';
+//   console.log(query);
 
-  bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
-}
+//   bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
+// };
 
 exports.getImpressionsByBook = function(req, res) {
   var businessName = req.params.businessName

@@ -23,17 +23,17 @@ angular.module('roiBigQuerySpike')
       promise.success(function(resp, status, headers, config) {
         var data = resp.list;
         console.log(data);
-        $scope.recentTotalImpressionsChart = Roiservice.makeChartData('ColumnChart');
-        $scope.recentTotalImpressionsChart.options.vAxis.title = "Total Appearences";
+        $scope.recentTotalImpressionsByBookChart = Roiservice.makeChartData('ColumnChart');
+        $scope.recentTotalImpressionsByBookChart.options.vAxis.title = "Total Appearences";
         var cols = [{id: "date", label: "Date", type: "string"}, {id:"count", label:"Count", type:"number"}]
           , rows = [];
         for (var idx = 0; idx < data.length; idx++) {
           rows.push({c: [ { v: data[idx].month + "/" + data[idx].year }, { v: data[idx].impression_count } ]});
         }
-        $scope.recentTotalImpressionsChart.data = {rows: rows, cols: cols};
-        $scope.recentTotalImpressionsChart.query = resp.query;
-        $scope.recentTotalImpressionsChart.cacheHit = resp.cacheHit;
-        $scope.recentTotalImpressionsChart.options.title = 'Recent Appearences for ' + $scope.businessName + ' from ' + $scope.book;
+        $scope.recentTotalImpressionsByBookChart.data = {rows: rows, cols: cols};
+        $scope.recentTotalImpressionsByBookChart.query = resp.query;
+        $scope.recentTotalImpressionsByBookChart.cacheHit = resp.cacheHit;
+        $scope.recentTotalImpressionsByBookChart.options.title = 'Recent Appearences for ' + $scope.businessName + ' from ' + $scope.book;
       }).error(function(resp, status, headers, config) {
         console.log('Failed to download recent impressions by book');
       });
