@@ -42,7 +42,7 @@ angular.module('roiBigQuerySpike')
         $scope.recentTotalInteractionsChart.cacheHit = resp.cacheHit;
         $scope.recentTotalInteractionsChart.totalBytesProcessed = resp.totalBytesProcessed;
         $scope.recentTotalInteractionsChart.options.title = 'Recent Interactions for ' + $scope.businessName;
-        $scope.lastMonthTotalInteractions = data.lenght > 0 ? data[data.length - 1].action_count : 0;
+        $scope.lastMonthTotalInteractions = data.length > 0 ? data[data.length - 1].action_count : 0;
       }).error(function(resp, status, headers, config) {
         console.log('Failed to download recent interactions');
       });

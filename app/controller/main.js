@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('roiBigQuerySpike')
-  .controller('Main2Ctrl', ['$scope', function ($scope) {
+  .controller('Main2Ctrl', ['$scope', '$location', function ($scope, $location) {
     // TODO: this block of code repeats in each controller
     // var promise = $http.get('http://localhost:5000/roi/10RandomBusinessNames');
     // promise.success(function(data, status, headers, config) {
@@ -17,4 +17,13 @@ angular.module('roiBigQuerySpike')
     $scope.bothBusNameAndBookAreSelected = function() {
       return $scope.book && $scope.businessName;
     };
+
+    $scope.isActive = function(route) {
+        return route === $location.path();
+    };
+
+    $scope.books = [];
+    for (var idx = 0; idx < 10; idx++) {
+        $scope.books.push('BOOK' + idx);
+    }
   }]);

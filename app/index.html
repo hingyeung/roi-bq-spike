@@ -35,19 +35,37 @@
       <div class="span6">
         <form class="">
           <label>Business</label>
-          <select ng-model="businessName" ng-options="busName for busName in businessNames"></select>
+          <select ng-model="businessName" ng-options="busName for busName in businessNames">
+            <option value="">-- chose business --</option>
+          </select>
         </form>
       </div>
       <div class="span6">
         <form class="">
           <label>Book</label>
-          <select ng-model="book">
-            <option ng-repeat="b in [0,1,2,3,4,5,6,7,8,9,10]" value="BOOK{{b}}">BOOK{{b}}</option>
+          <select ng-model="book" ng-options="b for b in books">
+            <option value="">-- chose book --</option>
           </select>
         </form>
       </div>
     </div>
-    <div class="container" ng-view=""> </div>
+
+    <div class="tabbable">
+      <ul class="nav nav-tabs">
+        <li ng-class="{active: isActive('/nationalSummary')}">
+          <a href="#/nationalSummary">National Summary</a>
+        </li>
+        <li ng-class="{active: isActive('/bookImpressions')}">
+          <a href="#/bookImpressions">Impressions from Book</a>
+        </li>
+        <li ng-class="{active: isActive('/bookInteractions')}">
+          <a href="#/bookInteractions">Interactions from Book</a>
+        </li>
+      </ul>
+      <div class="tab-content" ng-view></div>
+    </div>
+
+    <!-- <div class="container" ng-view=""> </div> -->
 
     <script src="//www.google.com/jsapi"></script>
     <script src="bower_components/jquery/jquery.js"></script>
