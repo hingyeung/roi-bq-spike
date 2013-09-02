@@ -124,7 +124,7 @@ exports.getRecentInteractionsForBusinessByBook = function(req, res) {
   bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
 };
 
-exports.getAllImpressionsForBusiness = function(req, res) {
+exports.getAllRecentImpressionsForBusiness = function(req, res) {
   var businessName = req.params.businessName;
   var query = 'select year,month,count(*) as impression_count ' +
     ' from ' + DATA_SET + '.direct_impressions,' + DATA_SET + '.search_impressions ' +
@@ -174,10 +174,30 @@ exports.getAllRecentImpressionsForBusiness = function(req, res) {
   fromDate.setMonth(fromDate.getMonth() - 6);
 
   var businessName = req.params.businessName
+    , query = 'select year, month, count(*) as impression_count ' +
+    ' from ' + DATA_SET + '.direct_impressions,' + DATA_SET + '.search_impressions ' +
+    ' where business ="' + businessName + '"' +
+    ' AND timestamp >= TIMESTAMP("' + fromDate.getFullYear() + '-' + (fromDate.getMonth() + 1) + '-01") ' +
+    ' AND timestamp < TIMESTAMP("' + toDate.getFullYear() + '-' + (toDate.getMonth() + 1) + '-01") ' +
+    ' GROUP BY year, month ' +
+    ' ORDER BY year, month';
+  console.log(query);
+
+  bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
+};
+
+exports.getAllRecentImpressionsForBusinessByBook = function(req, res) {
+  console.log('getAllRecentImpressionsForBusinessByBook');
+  var toDate = new Date()
+    , fromDate = new Date();
+  fromDate.setMonth(fromDate.getMonth() - 6);
+
+  var businessName = req.params.businessName
     , book = req.params.book
     , query = 'select year, month, count(*) as impression_count ' +
     ' from ' + DATA_SET + '.direct_impressions,' + DATA_SET + '.search_impressions ' +
     ' where business ="' + businessName + '"' +
+    ' AND book = "' + book + '" ' +
     ' AND timestamp >= TIMESTAMP("' + fromDate.getFullYear() + '-' + (fromDate.getMonth() + 1) + '-01") ' +
     ' AND timestamp < TIMESTAMP("' + toDate.getFullYear() + '-' + (toDate.getMonth() + 1) + '-01") ' +
     ' GROUP BY year, month ' +

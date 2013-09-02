@@ -26,8 +26,8 @@ angular.module('roiBigQuerySpike')
       return $http.get('http://localhost:5000/roi/impressionsPerChannelByBook/' + businessName + '/' + book + '/' + year + '/' + month);
     };
 
-    this.fetchRecentImpressionsForBusiness = function(businessName) {
-      return $http.get('http://localhost:5000/roi/impressions/' + businessName);
+    this.fetchRecentImpressionsForBusinessByBook = function(businessName, book) {
+      return $http.get('http://localhost:5000/roi/impressions/' + businessName + '/' + book);
     }
 
     this.makeChartData = function(chartType) {

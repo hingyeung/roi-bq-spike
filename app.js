@@ -22,7 +22,7 @@ app.get('/', function(request, response) {
 app.get('/roi/list/datasets', roi.listDatasets);
 app.get('/roi/10RandomBusinessNames', roi.getTenRandomBusinessNames);
 app.get('/roi/allActions/:businessName', roi.getAllActionsForBusiness);
-app.get('/roi/allImpressions/:businessName', roi.getAllImpressionsForBusiness);
+app.get('/roi/allImpressions/:businessName', roi.getAllRecentImpressionsForBusiness);
 // app.get('/roi/topInteractions/:businessName/:book/:year/:month', roi.getTopInteractionWithChannelForBusinessByBook);
 app.get('/roi/impressionsByBook/:businessName/:book/:year/:month', roi.getImpressionsByBook);
 app.get('/roi/getActionCount', roi.getActionCount);
@@ -30,7 +30,7 @@ app.get('/roi/getActionCount', roi.getActionCount);
 app.get('/roi/interactionsByBook/:businessName/:book/:year/:month', roi.getInteractionForBusinessByBook);
 app.get('/roi/interactionsByBook/:businessName/:book', roi.getRecentInteractionsForBusinessByBook);
 app.get('/roi/impressionsPerChannelByBook/:businessName/:book/:year/:month', roi.getImpressionsPerChannelByBook);
-app.get('/roi/impressions/:businessName', roi.getAllRecentImpressionsForBusiness);
+app.get('/roi/impressions/:businessName/:book', roi.getAllRecentImpressionsForBusinessByBook);
 
 
 var port = process.env.PORT || 5000;

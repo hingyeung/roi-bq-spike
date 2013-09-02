@@ -13,13 +13,13 @@ angular.module('roiBigQuerySpike')
         $scope.impressionAndChannelByBook = data;
         $scope.miscReportOptions = { month: lastMonth.getMonth() + 1, year: lastMonth.getFullYear()};
       }).error(function(data, status, headers, config) {
-        console.log('Failed to download impressions by book');
+        console.log('Failed to download impressions per channel by book');
       });
 
     };
 
-    var fetchRecentImpressionsForBusiness = function() {
-      var promise = Roiservice.fetchRecentImpressionsForBusiness($scope.businessName);
+    var fetchRecentImpressionsForBusinessByBook = function() {
+      var promise = Roiservice.fetchRecentImpressionsForBusinessByBook($scope.businessName, $scope.book);
       promise.success(function(resp, status, headers, config) {
         var data = resp.list;
         console.log(data);
@@ -31,22 +31,24 @@ angular.module('roiBigQuerySpike')
           rows.push({c: [ { v: data[idx].month + "/" + data[idx].year }, { v: data[idx].impression_count } ]});
         }
         $scope.recentTotalImpressionsChart.data = {rows: rows, cols: cols};
+        $scope.recentTotalImpressionsChart.query = resp.query;
+        $scope.recentTotalImpressionsChart.cacheHit = resp.cacheHit;
+        $scope.recentTotalImpressionsChart.options.title = 'Recent Appearences for ' + $scope.businessName + ' from ' + $scope.book;
       }).error(function(resp, status, headers, config) {
-        console.log('Failed to download recent impressions');
+        console.log('Failed to download recent impressions by book');
       });
     };
 
     // TODO: the following two watches are repeated in every controller
     $scope.$watch('businessName', function() {
-      if (!$scope.businessName) return;
-      fetchRecentImpressionsForBusiness();
-
       if (!$scope.book || !$scope.businessName) return;
+      fetchRecentImpressionsForBusinessByBook();
       fetchDataToListimpressionsPerChannelByBookFromLastMonth();
     });
 
     $scope.$watch('book', function() {
       if (!$scope.book || !$scope.businessName) return;
+      fetchRecentImpressionsForBusinessByBook();
       fetchDataToListimpressionsPerChannelByBookFromLastMonth();
     });
 
