@@ -24,10 +24,33 @@ angular.module('roiBigQuerySpike')
       });
     };
 
+    var fetchRecentInteractionsForBusiness = function() {
+      var promise = Roiservice.fetchRecentInteractionsForBusiness($scope.businessName);
+      promise.success(function(resp, status, headers, config) {
+        var data = resp.list;
+        console.log(resp);
+        $scope.recentTotalInteractionsChart = Roiservice.makeChartData('ColumnChart');
+        $scope.recentTotalInteractionsChart.options.vAxis.title = "Total Interactions";
+        var cols = [{id: "date", label: "Date", type: "string"}, {id:"count", label:"Count", type:"number"}]
+          , rows = [];
+        for (var idx = 0; idx < data.length; idx++) {
+          rows.push({c: [ { v: data[idx].month + "/" + data[idx].year }, { v: data[idx].action_count } ]});
+        }
+        $scope.recentTotalInteractionsChart.data = {rows: rows, cols: cols};
+        $scope.recentTotalInteractionsChart.query = resp.query;
+        $scope.recentTotalInteractionsChart.cacheHit = resp.cacheHit;
+        $scope.recentTotalInteractionsChart.options.title = 'Recent Interactions for ' + $scope.businessName;
+        $scope.lastMonthTotalInteractions = data[data.length - 1].action_count;
+      }).error(function(resp, status, headers, config) {
+        console.log('Failed to download recent interactions');
+      });
+    };
+
     // TODO: the following two watches are repeated in every controller
     $scope.$watch('businessName', function() {
       if (!$scope.businessName) return;
 
       fetchRecentImpressionsForBusiness();
+      fetchRecentInteractionsForBusiness();
     });
   }]);

@@ -18,6 +18,10 @@ angular.module('roiBigQuerySpike')
       return $http.get('http://localhost:5000/roi/interactionsByBook/' + businessName + '/' + book);
     };
 
+    this.fetchRecentInteractionsForBusiness = function(businessName) {
+      return $http.get('http://localhost:5000/roi/interactions/' + businessName);
+    };
+
     this.fetchActionsForBusinessByBook = function(businessName, book, year, month) {
       return $http.get('http://localhost:5000/roi/interactionsByBook/' + businessName +'/' + book + '/' + year + '/' + month);
     };

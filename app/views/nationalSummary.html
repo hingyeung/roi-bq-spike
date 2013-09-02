@@ -1,10 +1,13 @@
 <h2>National Summary Reports</h2>
 <div class="row-fluid">
   <div class="span6">
-    <span>Total Appearances Nationally: {{lastMonthTotalImpressions}}</span>
-  </div>
-  <div class="span6">
+    <p>Total Appearances Nationally: {{lastMonthTotalImpressions}}</p>
     <div google-chart chart="recentTotalImpressionsChart" />
     <collapsable-chart-details data="recentTotalImpressionsChart"></collapsable-chart-details>
+  </div>
+  <div class="span6">
+    <p>Total Interactions Nationally: {{lastMonthTotalInteractions}}</p>
+    <div google-chart chart="recentTotalInteractionsChart" />
+    <collapsable-chart-details data="recentTotalInteractionsChart"></collapsable-chart-details>
   </div>
 </div>

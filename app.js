@@ -29,6 +29,7 @@ app.get('/roi/getActionCount', roi.getActionCount);
 // book interaction reports
 app.get('/roi/interactionsByBook/:businessName/:book/:year/:month', roi.getInteractionForBusinessByBook);
 app.get('/roi/interactionsByBook/:businessName/:book', roi.getRecentInteractionsForBusinessByBook);
+app.get('/roi/interactions/:businessName', roi.getRecentInteractionsForBusiness);
 app.get('/roi/impressionsPerChannelByBook/:businessName/:book/:year/:month', roi.getImpressionsPerChannelByBook);
 app.get('/roi/impressions/:businessName/:book', roi.getAllRecentImpressionsForBusinessByBook);
 app.get('/roi/impressions/:businessName', roi.getAllRecentImpressionsForBusiness);
