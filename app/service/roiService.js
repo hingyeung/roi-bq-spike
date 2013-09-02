@@ -14,7 +14,7 @@ angular.module('roiBigQuerySpike')
       return $http.get('http://localhost:5000/roi/10RandomBusinessNames');
     };
 
-    this.fetchRecentActionsForBusinessByBook = function(businessName, book) {
+    this.fetchRecentInteractionsForBusinessByBook = function(businessName, book) {
       return $http.get('http://localhost:5000/roi/interactions/' + businessName + '/' + book);
     };
 
@@ -22,7 +22,7 @@ angular.module('roiBigQuerySpike')
       return $http.get('http://localhost:5000/roi/interactions/' + businessName);
     };
 
-    this.fetchActionsForBusinessByBook = function(businessName, book, year, month) {
+    this.fetchInteractionsForBusinessByBookAndDate = function(businessName, book, year, month) {
       return $http.get('http://localhost:5000/roi/interactions/' + businessName +'/' + book + '/' + year + '/' + month);
     };
 
@@ -32,11 +32,11 @@ angular.module('roiBigQuerySpike')
 
     this.fetchRecentImpressionsForBusinessByBook = function(businessName, book) {
       return $http.get('http://localhost:5000/roi/impressions/' + businessName + '/' + book);
-    }
+    };
 
     this.fetchRecentImpressionsForBusiness = function(businessName) {
       return $http.get('http://localhost:5000/roi/impressions/' + businessName);
-    }
+    };
 
     this.makeChartData = function(chartType) {
       return {

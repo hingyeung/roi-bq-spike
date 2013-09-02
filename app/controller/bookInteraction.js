@@ -15,7 +15,7 @@ angular.module('roiBigQuerySpike')
 
       var lastMonth = Roiservice.dateOffsetByMonth(-1);
       $scope.miscReportOptions = {year: lastMonth.getFullYear(), month: lastMonth.getMonth() + 1};
-      var promise = Roiservice.fetchActionsForBusinessByBook($scope.businessName, $scope.book, lastMonth.getFullYear(), lastMonth.getMonth());
+      var promise = Roiservice.fetchInteractionsForBusinessByBookAndDate($scope.businessName, $scope.book, lastMonth.getFullYear(), lastMonth.getMonth());
       promise.success(function(resp, status, headers, config) {
         var data = resp.list;
         console.log(data);
@@ -26,10 +26,10 @@ angular.module('roiBigQuerySpike')
       });
     };
 
-    var fetchRecentActionsForBusinessByBook = function() {
+    var fetchRecentInteractionsForBusinessByBook = function() {
       if (! $scope.bothBusNameAndBookAreSelected()) return;
 
-      var promise = Roiservice.fetchRecentActionsForBusinessByBook($scope.businessName, $scope.book);
+      var promise = Roiservice.fetchRecentInteractionsForBusinessByBook($scope.businessName, $scope.book);
       promise.success(function(resp, status, headers, config) {
         var data = resp.list;
         console.log(data);
@@ -95,14 +95,14 @@ angular.module('roiBigQuerySpike')
       if (!$scope.book || !$scope.businessName) return;
 
       fetchDataToListInteractionsByBookFromLastMonth();
-      fetchRecentActionsForBusinessByBook();
+      fetchRecentInteractionsForBusinessByBook();
     });
 
     $scope.$watch('book', function() {
       if (!$scope.book || !$scope.businessName) return;
       
       fetchDataToListInteractionsByBookFromLastMonth();
-      fetchRecentActionsForBusinessByBook();
+      fetchRecentInteractionsForBusinessByBook();
     });
 
     // // TODO: this function is repeated in every controller
