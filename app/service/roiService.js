@@ -15,7 +15,7 @@ angular.module('roiBigQuerySpike')
     };
 
     this.fetchRecentActionsForBusinessByBook = function(businessName, book) {
-      return $http.get('http://localhost:5000/roi/interactionsByBook/' + businessName + '/' + book);
+      return $http.get('http://localhost:5000/roi/interactions/' + businessName + '/' + book);
     };
 
     this.fetchRecentInteractionsForBusiness = function(businessName) {
@@ -23,11 +23,11 @@ angular.module('roiBigQuerySpike')
     };
 
     this.fetchActionsForBusinessByBook = function(businessName, book, year, month) {
-      return $http.get('http://localhost:5000/roi/interactionsByBook/' + businessName +'/' + book + '/' + year + '/' + month);
+      return $http.get('http://localhost:5000/roi/interactions/' + businessName +'/' + book + '/' + year + '/' + month);
     };
 
     this.fetchDataToListimpressionsPerChannelByBookFromLastMonth = function(businessName, book, year, month) {
-      return $http.get('http://localhost:5000/roi/impressionsPerChannelByBook/' + businessName + '/' + book + '/' + year + '/' + month);
+      return $http.get('http://localhost:5000/roi/impressionsPerChannel/' + businessName + '/' + book + '/' + year + '/' + month);
     };
 
     this.fetchRecentImpressionsForBusinessByBook = function(businessName, book) {

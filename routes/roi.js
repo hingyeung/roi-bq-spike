@@ -24,22 +24,6 @@ var https = require('https')
     businessNames = data.toString().split("\n");
   });
 
-
-    // bqClient.getProjects(function (err, projs) {
-    //     console.log(projs.projects); //list of projects.
-    // });
-
-    // bqClient.tables.create({... your table resource ...}, function (err, table){
-    //     console.log(table);
-    //     console.log(table.tableReference.tableId); //table's id.
-    // });
-
-exports.listDatasets = function(req, res){
-  bqClient.datasets.getAll(ROI_PROJECT_ID, function(err, datasets) {
-    console.log(datasets);
-  });
-};
-
 exports.getTenRandomBusinessNames = function(req, res) {
   var names = [];
   for (var idx = 0; idx < 10; idx++) {
@@ -47,11 +31,6 @@ exports.getTenRandomBusinessNames = function(req, res) {
   }
   res.send(names);
 };
-
-// exports.getAllImpressions = function(req, res) {
-//   var bussines = req.params.businessName;
-//   var query = "SELECT business, count(*) as impression_count from [' + DATA_SET + '.direct_impressions, ' + DATA_SET + '.search_impressions] WHERE business = " + business + " AND year = 2013 AND month = 8 GROUP BY business"
-// };
 
 var bigQueryCallback = function(res) {
   return function(err, resp) {
@@ -66,25 +45,6 @@ var bigQueryCallback = function(res) {
     res.send(resp);
   };
 };
-
-// exports.getTopInteractionWithChannelForBusinessByBook = function(req, res) {
-//   var businessName = req.params.businessName
-//     , book = req.params.book
-//     , year = req.params.year
-//     , month = req.params.month
-//     , query = 'select channel, action, count(action) as action_count ' +
-//       ' from ' + DATA_SET + '.actions ' +
-//       ' where business = "' + businessName + '"' +
-//       ' and book = "' + book + '" ' +
-//       ' and year = ' + year + ' ' +
-//       ' and month = ' + month + ' ' +
-//       ' group by channel, action ' +
-//       ' order by action_count desc ' +
-//       ' limit 15 ';
-//   console.log(query);
-
-//   bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
-// };
 
 exports.getInteractionForBusinessByBook = function(req, res) {
   console.log('getInteractionForBusinessByBook');
@@ -142,33 +102,6 @@ exports.getRecentInteractionsForBusiness = function(req, res) {
   bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
 };
 
-// exports.getAllRecentImpressionsForBusiness = function(req, res) {
-//   var businessName = req.params.businessName;
-//   var query = 'select year,month,count(*) as impression_count ' +
-//     ' from ' + DATA_SET + '.direct_impressions,' + DATA_SET + '.search_impressions ' +
-//     ' where business ="' + businessName + '"' +
-//     ' group by year,month ' +
-//     ' order by year,month';
-//   console.log(query);
-
-//   bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
-// };
-
-exports.getImpressionsByBook = function(req, res) {
-  var businessName = req.params.businessName
-    , book = req.params.book
-    , year = req.params.year
-    , month = req.params.month
-    , query = 'select channel, count(channel) as impression_count ' +
-        ' from ' + DATA_SET + '.search_impressions, ' + DATA_SET + '.direct_impressions ' +
-        ' where business = "' + businessName + '" ' +
-        ' and year = ' + year + ' and month = ' + month + ' ' +
-        ' group by channel';
-    console.log(query);
-
-    bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
-};
-
 exports.getImpressionsPerChannelByBook = function(req, res) {
   var businessName = req.params.businessName
     , book = req.params.book
@@ -222,22 +155,5 @@ exports.getAllRecentImpressionsForBusinessByBook = function(req, res) {
     ' ORDER BY year, month';
   console.log(query);
 
-  bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
-};
-
-exports.getAllActionsForBusiness = function(req, res) {
-  var businessName = req.params.businessName,
-  query = 'SELECT year, month, count(action) as action_count from [' + DATA_SET + '.actions] ' +
-  ' WHERE business = "' + businessName + '"' +
-  ' AND timestamp < CURRENT_TIMESTAMP() and timestamp > DATE_ADD(timestamp, -6, "MONTH")' +
-  ' GROUP BY year, month' +
-  ' ORDER BY year, month';
-  console.log(query);
-
-  bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
-};
-
-exports.getActionCount = function(req, res) {
-  var query = 'SELECT count(*) from fake_roi_data.actions';
   bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
 };
