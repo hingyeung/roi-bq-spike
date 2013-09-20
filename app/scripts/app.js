@@ -8,10 +8,6 @@ google.load('visualization', '1', {packages: ['corechart']});
 angular.module('roiBigQuerySpike', ['googlechart.directives', 'ui.bootstrap'])
   .config(function ($routeProvider) {
     $routeProvider
-      .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl'
-      })
       .when('/v2', {
         templateUrl: 'views/bookInteractions.html',
         controller: 'Main2Ctrl'
@@ -28,7 +24,11 @@ angular.module('roiBigQuerySpike', ['googlechart.directives', 'ui.bootstrap'])
         templateUrl: 'views/nationalSummary.html',
         controller: 'NationalsummaryCtrl'
       })
+      .when('/stateRollup', {
+        templateUrl: 'views/stateRollup.html',
+        controller: 'StateRollupCtrl'
+      })
       .otherwise({
-        redirectTo: '/'
+        redirectTo: '/nationalSummary'
       });
   });

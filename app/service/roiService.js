@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('roiBigQuerySpike')
-  .service('Roiservice', ['$http', function Roiservice($http) {
+  .service('Roiservice', ['$http', '$q', function Roiservice($http, $q) {
     // TODO: this block of code repeats in each controller
     this.dateOffsetByMonth = function(offset) {
       var newDate = new Date();
@@ -36,6 +36,13 @@ angular.module('roiBigQuerySpike')
 
     this.fetchRecentImpressionsForBusiness = function(businessName) {
       return $http.get('http://localhost:5000/roi/impressions/' + businessName);
+    };
+
+    this.fetchDataForStateRollupReport = function(businessName, state, year, month) {
+      return $q.all([
+             $http.get('http://localhost:5000/roi/interactionsPerBook/' + businessName + '/' + state + '/' + year + '/' + month),
+             $http.get('http://localhost:5000/roi/impressionsPerBook/' + businessName + '/' + state + '/' + year + '/' + month)
+          ]);
     };
 
     this.makeChartData = function(chartType) {

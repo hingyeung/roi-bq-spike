@@ -4,7 +4,7 @@
     <table class="table table-bordered table-striped table-condensed table-hover" ng-show="bothBusNameAndBookAreSelected()">
       <thead>
         <caption><strong>Impressions for {{businessName}} in {{miscReportOptions.month}}/{{miscReportOptions.year}} from {{book}}</strong></caption>
-        <tr><th>Channel</th><th>Count</th>
+        <tr><th>Channel</th><th>Count</th></tr>
       </thead>
       <tbody>
         <tr ng-repeat="impressionPerChannel in impressionAndChannelByBook">

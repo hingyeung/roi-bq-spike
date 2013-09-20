@@ -17,7 +17,7 @@
         <link rel="stylesheet" href="styles/main.css">
         <!-- endbuild -->
 </head>
-  <body ng-app="roiBigQuerySpike" ng-controller="Main2Ctrl">
+  <body ng-controller="MainCtrl">
     <!--[if lt IE 7]>
       <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
     <![endif]-->
@@ -32,19 +32,27 @@
         <div class="page-header navbar-inner"><h1>ROI Spike <small>Powered by Google BigQuery</small></h1></div>
     </div>
     <div class="row-fluid">
-      <div class="span6">
+      <div class="span4">
         <form class="">
           <label>Business</label>
           <select ng-model="businessName" ng-options="busName for busName in businessNames">
-            <option value="">-- chose business --</option>
+            <option value="">-- choose a business --</option>
           </select>
         </form>
       </div>
-      <div class="span6">
+      <div class="span4">
+        <form class="">
+          <label>State</label>
+          <select ng-model="state" ng-options="s for s in ['VIC', 'NSW', 'QLD']">
+            <option value="">-- choose a state --</option>
+          </select>
+        </form>
+      </div>
+      <div class="span4">
         <form class="">
           <label>Book</label>
           <select ng-model="book" ng-options="b for b in books">
-            <option value="">-- chose book --</option>
+            <option value="">-- choose a book --</option>
           </select>
         </form>
       </div>
@@ -55,6 +63,9 @@
         <li ng-class="{active: isActive('/nationalSummary')}">
           <a href="#/nationalSummary">National Summary</a>
         </li>
+        <li ng-class="{active: isActive('/stateRoullup')}">
+          <a href="#/stateRollup">State Rollup</a>
+        </li>
         <li ng-class="{active: isActive('/bookImpressions')}">
           <a href="#/bookImpressions">Impressions from Book</a>
         </li>
@@ -64,8 +75,6 @@
       </ul>
       <div class="tab-content" ng-view></div>
     </div>
-
-    <!-- <div class="container" ng-view=""> </div> -->
 
     <script src="//www.google.com/jsapi"></script>
     <script src="bower_components/jquery/jquery.js"></script>
@@ -89,6 +98,7 @@
     <script src="service/roiService.js"></script>
     <script src="controller/bookImpression.js"></script>
     <script src="controller/nationalSummary.js"></script>
+    <script src="controller/stateRollup.js"></script>
     <!-- endbuild -->
   </body>
   </html>

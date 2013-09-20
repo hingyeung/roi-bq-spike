@@ -46,6 +46,26 @@ var bigQueryCallback = function(res) {
   };
 };
 
+exports.getInteractionsPerBook = function(req, res) {
+  console.log('getInteractionsPerBook');
+  var businessName = req.params.businessName
+    , state = req.params.state
+    , year = req.params.year
+    , month = req.params.month
+    , query = 'select book, action, count(action) as action_count ' +
+      ' from ' + DATA_SET + '.actions ' +
+      ' where business = "' + businessName + '"' +
+      ' and state = "' + state + '" ' +
+      ' and year = ' + year + ' ' +
+      ' and month = ' + month + ' ' +
+      ' and action in ("EUC", "MIC", "PAC", "STM") ' +
+      ' group by book, action ' +
+      ' order by book, action'
+  console.log(query);
+
+  bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
+}
+
 exports.getInteractionForBusinessByBook = function(req, res) {
   console.log('getInteractionForBusinessByBook');
   var businessName = req.params.businessName
@@ -117,6 +137,22 @@ exports.getImpressionsPerChannelByBook = function(req, res) {
 
     bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
 };
+
+exports.getImpressionsPerBook = function(req, res) {
+  var businessName = req.params.businessName
+    , state = req.params.state
+    , year = req.params.year
+    , month = req.params.month
+    , query = 'select book, count(book) as impression_count ' +
+        ' from ' + DATA_SET + '.search_impressions, ' + DATA_SET + '.direct_impressions ' +
+        ' where business = "' + businessName + '" ' +
+        ' and state = "' + state + '" ' +
+        ' and year = ' + year + ' and month = ' + month + ' ' +
+        ' group by book order by book';
+    console.log(query);
+
+    bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
+}
 
 exports.getAllRecentImpressionsForBusiness = function(req, res) {
   console.log('getAllRecentImpressionsForBusiness');

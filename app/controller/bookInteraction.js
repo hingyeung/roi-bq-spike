@@ -9,6 +9,7 @@ var ACTIONS = ['ACTION0', 'ACTION1', 'ACTION2'];
 
 angular.module('roiBigQuerySpike')
   .controller('BookinteractionCtrl', ['$scope', 'Roiservice', function ($scope, Roiservice) {
+    console.log('BookinteractionCtrl')
 
     var fetchDataToListInteractionsByBookFromLastMonth = function() {
       if (! $scope.bothBusNameAndBookAreSelected()) return;

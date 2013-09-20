@@ -2,6 +2,8 @@
 
 angular.module('roiBigQuerySpike')
   .controller('NationalsummaryCtrl', ['$scope', 'Roiservice', function ($scope, Roiservice) {
+    console.log('NationalsummaryCtrl');
+    
     var fetchRecentImpressionsForBusiness = function() {
       var promise = Roiservice.fetchRecentImpressionsForBusiness($scope.businessName);
       promise.success(function(resp, status, headers, config) {
