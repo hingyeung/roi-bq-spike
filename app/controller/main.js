@@ -17,6 +17,10 @@ angular.module('roiBigQuerySpike')
       return $scope.book && $scope.businessName;
     };
 
+    $scope.bothBusNameAndStateAreSelected = function() {
+      return $scope.state && $scope.businessName;
+    };
+
     $scope.isActive = function(route) {
         return route === $location.path();
     };

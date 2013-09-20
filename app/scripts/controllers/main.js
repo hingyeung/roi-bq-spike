@@ -218,7 +218,8 @@ angular.module('roiBigQuerySpike')
       fetchDataToDrawImpressionsByChannelAndBookChartFromLastMonth();
     });
 
-    $scope.bothBusNameAndBookAreSelected = function() {
-      return $scope.book && $scope.businessName;
-    }
+    // $scope.bothBusNameAndBookAreSelected = function() {
+    //   return $scope.book && $scope.businessName;
+    // };
+    
   }]);

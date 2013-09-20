@@ -24,21 +24,21 @@ angular.module('roiBigQuerySpike')
           console.log(interactionsPerBookResp);
           console.log(impressionsPerBookResp);
 
-          var stateReport = {};
+          $scope.stateReport = {};
 
           for (var idx = 0; idx < impressionsPerBookResp.list.length; idx++) {
             var row = impressionsPerBookResp.list[idx];
-            stateReport[row.book] = stateReport[row.book] || new StateReportDetail();
-            stateReport[row.book].impressions = stateReport[row.book].impressions + row.impression_count;
+            $scope.stateReport[row.book] = $scope.stateReport[row.book] || new StateReportDetail();
+            $scope.stateReport[row.book].impressions =+ parseInt(row.impression_count);
           }
 
           for (var idx = 0; idx < interactionsPerBookResp.list.length; idx++) {
             var row = interactionsPerBookResp.list[idx];
-            stateReport[row.book] = stateReport[row.book] || new StateReportDetail();
-            stateReport[row.book][row.action]++;
+            $scope.stateReport[row.book] = $scope.stateReport[row.book] || new StateReportDetail();
+            $scope.stateReport[row.book][row.action]++;
           }
 
-          console.log(stateReport);
+          $scope.booksInState = _.keys($scope.stateReport);
         });
     };
 
