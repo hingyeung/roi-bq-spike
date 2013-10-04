@@ -2,9 +2,12 @@
 
 angular.module('roiBigQuerySpike')
   .controller('BookimpressionCtrl', ['$scope', 'Roiservice', function ($scope, Roiservice) {
+    $scope.isLoadingImpressionsPerChannelByBook = false;
+    $scope.isLoadingImpressionsByBook = false;
     var fetchDataToListimpressionsPerChannelByBookFromLastMonth = function() {
       var lastMonth = Roiservice.dateOffsetByMonth(-1)
         , promise = Roiservice.fetchDataToListimpressionsPerChannelByBookFromLastMonth($scope.businessName, $scope.book, lastMonth.getFullYear(), lastMonth.getMonth() + 1);
+        $scope.isLoadingImpressionsPerChannelByBook = true;
 
         promise.success(function(resp, status, headers, config) {
         var data = resp.list;
@@ -12,6 +15,7 @@ angular.module('roiBigQuerySpike')
 
         $scope.impressionAndChannelByBook = data;
         $scope.miscReportOptions = { month: lastMonth.getMonth() + 1, year: lastMonth.getFullYear()};
+        $scope.isLoadingImpressionsPerChannelByBook = false;
       }).error(function(data, status, headers, config) {
         console.log('Failed to download impressions per channel by book');
       });
@@ -20,6 +24,7 @@ angular.module('roiBigQuerySpike')
 
     var fetchRecentImpressionsForBusinessByBook = function() {
       var promise = Roiservice.fetchRecentImpressionsForBusinessByBook($scope.businessName, $scope.book);
+      $scope.isLoadingImpressionsByBook = true;
       promise.success(function(resp, status, headers, config) {
         var data = resp.list;
         console.log(data);
@@ -35,6 +40,7 @@ angular.module('roiBigQuerySpike')
         $scope.recentTotalImpressionsByBookChart.cacheHit = resp.cacheHit;
         $scope.recentTotalImpressionsByBookChart.totalBytesProcessed = resp.totalBytesProcessed;
         $scope.recentTotalImpressionsByBookChart.options.title = 'Recent Appearences for ' + $scope.businessName + ' from ' + $scope.book;
+        $scope.isLoadingImpressionsByBook = false;
       }).error(function(resp, status, headers, config) {
         console.log('Failed to download recent impressions by book');
       });

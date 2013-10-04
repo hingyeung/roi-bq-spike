@@ -5,7 +5,16 @@
   <div class="panel-body">
     <div class="row">
       <div class="col-md-12">
-        <table class="table table-bordered table-striped table-condensed table-hover" ng-show="bothBusNameAndStateAreSelected()">
+        <div class="row">
+          <div class="col-md-offset-3 col-md-6">
+            <div class="progress progress-striped active" ng-show="isLoadingStateRollupReport == true">
+              <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+                <span class="sr-only">60% Complete</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <table class="table table-bordered table-striped table-condensed table-hover" ng-show="(bothBusNameAndStateAreSelected() && isLoadingStateRollupReport == false)">
           <thead>
             <caption><strong>Total Monthly Usage in {{state}} - {{month}}/{{year}}</strong></caption>
             <tr><th>Book</th><th>Impressions</th><th>EUC</th><th>MIC</th><th>PAC</th><th>STM</th></tr>

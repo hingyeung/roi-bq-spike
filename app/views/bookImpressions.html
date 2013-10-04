@@ -5,7 +5,16 @@
   <div class="panel-body">
     <div class="row">
       <div class="col-md-6">
-        <table class="table table-bordered table-striped table-condensed table-hover" ng-show="bothBusNameAndBookAreSelected()">
+        <div class="row">
+          <div class="col-md-offset-3 col-md-6">
+            <div class="progress progress-striped active" ng-show="isLoadingImpressionsPerChannelByBook == true">
+              <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+                <span class="sr-only">60% Complete</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <table class="table table-bordered table-striped table-condensed table-hover" ng-show="bothBusNameAndBookAreSelected() && isLoadingImpressionsPerChannelByBook == false">
           <thead>
             <caption><strong>Impressions for {{businessName}} in {{miscReportOptions.month}}/{{miscReportOptions.year}} from {{book}}</strong></caption>
             <tr><th>Channel</th><th>Count</th></tr>
@@ -19,6 +28,15 @@
         </table>
       </div>
       <div class="col-md-6">
+        <div class="row">
+          <div class="col-md-offset-3 col-md-6">
+            <div class="progress progress-striped active" ng-show="isLoadingImpressionsByBook == true">
+              <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+                <span class="sr-only">60% Complete</span>
+              </div>
+            </div>
+          </div>
+        </div>
         <div google-chart chart="recentTotalImpressionsByBookChart" />
         <collapsable-chart-details data="recentTotalImpressionsByBookChart"></collapsable-chart-details>
       </div>

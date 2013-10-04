@@ -1,0 +1,7 @@
+.container .panel {
+  min-height: 400px;
+}
+
+.panel .progress {
+  margin-top: 100px;
+}

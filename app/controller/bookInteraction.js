@@ -9,7 +9,10 @@ var ACTIONS = ['ACTION0', 'ACTION1', 'ACTION2'];
 
 angular.module('roiBigQuerySpike')
   .controller('BookinteractionCtrl', ['$scope', 'Roiservice', function ($scope, Roiservice) {
-    console.log('BookinteractionCtrl')
+    console.log('BookinteractionCtrl');
+
+    $scope.isLoadingInteractionsByBook = false;
+    $scope.isLoadingRecentInteractionsByBook = false;
 
     var fetchDataToListInteractionsByBookFromLastMonth = function() {
       if (! $scope.bothBusNameAndBookAreSelected()) return;
@@ -17,11 +20,13 @@ angular.module('roiBigQuerySpike')
       var lastMonth = Roiservice.dateOffsetByMonth(-1);
       $scope.miscReportOptions = {year: lastMonth.getFullYear(), month: lastMonth.getMonth() + 1};
       var promise = Roiservice.fetchInteractionsForBusinessByBookAndDate($scope.businessName, $scope.book, lastMonth.getFullYear(), lastMonth.getMonth());
+      $scope.isLoadingInteractionsByBook = true;
       promise.success(function(resp, status, headers, config) {
         var data = resp.list;
         console.log(data);
 
         $scope.interactionsByBook = data;
+        $scope.isLoadingInteractionsByBook = false;
       }).error(function(data, status, headers, config) {
         console.log('Failed to download top interactions');
       });
@@ -31,6 +36,7 @@ angular.module('roiBigQuerySpike')
       if (! $scope.bothBusNameAndBookAreSelected()) return;
 
       var promise = Roiservice.fetchRecentInteractionsForBusinessByBook($scope.businessName, $scope.book);
+      $scope.isLoadingRecentInteractionsByBook = true;
       promise.success(function(resp, status, headers, config) {
         var data = resp.list;
         console.log(data);
@@ -86,6 +92,7 @@ angular.module('roiBigQuerySpike')
         $scope.impressionsByChannelAndBookChart.cacheHit = resp.cacheHit;
         // console.log($scope.impressionsByChannelAndBookChart.data);
 
+        $scope.isLoadingRecentInteractionsByBook = false;
       }).error(function(data, status, headers, config) {
         console.log('Failed to download recent interactions');
       });

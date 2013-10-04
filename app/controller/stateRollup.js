@@ -5,6 +5,8 @@ angular.module('roiBigQuerySpike')
 
     console.log('StateRollupCtrl');
 
+    $scope.isLoadingStateRollupReport = false;
+
     function StateReportDetail() {
       this.impressions = 0;
       this.EUC = 0;
@@ -16,6 +18,7 @@ angular.module('roiBigQuerySpike')
      var fetchDataForStateRollupReport = function() {
       var lastMonth = Roiservice.dateOffsetByMonth(-1)
         , promise = Roiservice.fetchDataForStateRollupReport($scope.businessName, $scope.state, lastMonth.getFullYear(), lastMonth.getMonth() + 1);
+        $scope.isLoadingStateRollupReport = true;
       promise.then(
         function(responses, status, headers, config) {
           var interactionsPerBookResp = responses[0].data;
@@ -39,6 +42,7 @@ angular.module('roiBigQuerySpike')
           }
 
           $scope.booksInState = _.keys($scope.stateReport);
+          $scope.isLoadingStateRollupReport = false;
         });
     };
 
