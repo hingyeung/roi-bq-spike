@@ -1,10 +1,15 @@
 // Generated on 2013-08-11 using generator-express-angular 0.2.7
+// Modified to work with Express
+// See https://github.com/davidemoro/express-angular/blob/master/Gruntfile.js
 'use strict';
-var LIVERELOAD_PORT = 35729;
-var lrSnippet = require('connect-livereload')({ port: LIVERELOAD_PORT });
-var mountFolder = function (connect, dir) {
-  return connect.static(require('path').resolve(dir));
-};
+
+// no more needed, see grunt-express doc
+// var LIVERELOAD_PORT = 35729;
+// var lrSnippet = require('connect-livereload')({ port: LIVERELOAD_PORT });
+// var mountFolder = function (connect, dir) {
+//   return connect.static(require('path').resolve(dir));
+// };
+var path = require('path');
 
 // # Globbing
 // for performance reasons we're only matching one level down:
@@ -37,19 +42,56 @@ module.exports = function (grunt) {
         files: ['test/spec/{,*/}*.coffee'],
         tasks: ['coffee:test']
       },
-      livereload: {
-        options: {
-          livereload: LIVERELOAD_PORT
-        },
-        files: [
-          '<%= yeoman.app %>/{,*/}*.html',
-          '{.tmp,<%= yeoman.app %>}/styles/{,*/}*.css',
-          '{.tmp,<%= yeoman.app %>}/scripts/{,*/}*.js',
-          '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
-        ]
-      }
+      // livereload: {
+      //   options: {
+      //     livereload: LIVERELOAD_PORT
+      //   },
+      //   files: [
+      //     '<%= yeoman.app %>/{,*/}*.html',
+      //     '{.tmp,<%= yeoman.app %>}/styles/{,*/}*.css',
+      //     '{.tmp,<%= yeoman.app %>}/scripts/{,*/}*.js',
+      //     '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
+      //   ]
+      // }
     },
-    connect: {
+    // connect: {
+    //   options: {
+    //     port: 9000,
+    //     // Change this to '0.0.0.0' to access the server from outside.
+    //     hostname: 'localhost'
+    //   },
+    //   livereload: {
+    //     options: {
+    //       middleware: function (connect) {
+    //         return [
+    //           lrSnippet,
+    //           mountFolder(connect, '.tmp'),
+    //           mountFolder(connect, yeomanConfig.app)
+    //         ];
+    //       }
+    //     }
+    //   },
+    //   test: {
+    //     options: {
+    //       middleware: function (connect) {
+    //         return [
+    //           mountFolder(connect, '.tmp'),
+    //           mountFolder(connect, 'test')
+    //         ];
+    //       }
+    //     }
+    //   },
+    //   dist: {
+    //     options: {
+    //       middleware: function (connect) {
+    //         return [
+    //           mountFolder(connect, yeomanConfig.dist)
+    //         ];
+    //       }
+    //     }
+    //   }
+    // },
+    express: {
       options: {
         port: 9000,
         // Change this to '0.0.0.0' to access the server from outside.
@@ -57,38 +99,29 @@ module.exports = function (grunt) {
       },
       livereload: {
         options: {
-          middleware: function (connect) {
-            return [
-              lrSnippet,
-              mountFolder(connect, '.tmp'),
-              mountFolder(connect, yeomanConfig.app)
-            ];
-          }
+          server: path.resolve('./app.js'),
+          livereload: true,
+          serverreload: false,
+          bases: [path.resolve('./.tmp'), path.resolve(__dirname, yeomanConfig.app)]
         }
       },
       test: {
         options: {
-          middleware: function (connect) {
-            return [
-              mountFolder(connect, '.tmp'),
-              mountFolder(connect, 'test')
-            ];
-          }
+          server: path.resolve('./app.js'),
+          bases: [path.resolve('./.tmp'), path.resolve(__dirname, 'test')]
         }
       },
       dist: {
         options: {
-          middleware: function (connect) {
-            return [
-              mountFolder(connect, yeomanConfig.dist)
-            ];
-          }
+          server: path.resolve('./app.js'),
+          bases: path.resolve(__dirname, yeomanConfig.dist)
         }
       }
     },
     open: {
       server: {
-        url: 'http://localhost:<%= connect.options.port %>'
+        // url: 'http://localhost:<%= connect.options.port %>'
+        url: 'http://localhost:<%= express.options.port %>'
       }
     },
     clean: {
@@ -227,6 +260,7 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.dist %>',
           src: [
             '*.{ico,png,txt}',
+	    '*.html', 'views/*.html',
             '.htaccess',
             'bower_components/**/*',
             'images/{,*/}*.{gif,webp}',
@@ -252,8 +286,8 @@ module.exports = function (grunt) {
       dist: [
         'coffee',
         'imagemin',
-        'svgmin',
-        'htmlmin'
+        'svgmin'
+        //'htmlmin'
       ]
     },
     karma: {
@@ -290,13 +324,15 @@ module.exports = function (grunt) {
 
   grunt.registerTask('server', function (target) {
     if (target === 'dist') {
-      return grunt.task.run(['build', 'open', 'connect:dist:keepalive']);
+      // return grunt.task.run(['build', 'open', 'connect:dist:keepalive']);
+      return grunt.task.run(['build', 'open', 'express:dist:keepalive']);
     }
 
     grunt.task.run([
       'clean:server',
       'concurrent:server',
-      'connect:livereload',
+      // 'connect:livereload',
+      'express:livereload',
       'open',
       'watch'
     ]);
@@ -305,7 +341,8 @@ module.exports = function (grunt) {
   grunt.registerTask('test', [
     'clean:server',
     'concurrent:test',
-    'connect:test',
+    // 'connect:test',
+    'express:test',
     'karma'
   ]);
 
