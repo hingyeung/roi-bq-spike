@@ -52,6 +52,8 @@ angular.module('roiBigQuerySpike')
         "cssStyle": "height:600px; width:100%;",
         "data": {},
         "options": {
+          "titleTextStyle": { "color": "#7F8C8D"},
+          "colors": ["#3498DB"],
           "legend": {"position": "none"},
           "title": "",
           "isStacked": "true",
