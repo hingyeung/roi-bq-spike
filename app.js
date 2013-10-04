@@ -1,4 +1,5 @@
 var express = require("express")
+  , http = require('http')
   , roi = require('./routes/roi');
  
 var app = express();
@@ -7,6 +8,7 @@ app.use(express.logger());
 // Configuration
 
 app.configure(function(){
+  app.set('port', process.env.VCAP_APP_PORT || 3000);
   app.set('views', __dirname + '/app');
   //app.set('view engine', 'jade');
   app.use(express.bodyParser());
@@ -30,9 +32,13 @@ app.get('/roi/impressions/:businessName', roi.getAllRecentImpressionsForBusiness
 app.get('/roi/impressionsPerBook/:businessName/:state/:year/:month', roi.getImpressionsPerBook);
 
 
-var port = process.env.PORT || 5000;
-app.listen(port, function() {
-  console.log("Listening on " + port);
-});
+// var port = process.env.PORT || 5000;
+// app.listen(port, function() {
+//   console.log("Listening on " + port);
+// });
 
 module.exports = app;
+
+http.createServer(app).listen(app.get('port'), function(){
+  console.log('Express server listening on port ' + app.get('port'));
+});

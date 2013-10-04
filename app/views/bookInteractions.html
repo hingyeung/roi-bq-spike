@@ -1,21 +1,27 @@
-<h2>Book Interaction Reports</h2>
-<div class="row-fluid">
-  <div class="span6">
-    <table class="table table-bordered table-striped table-condensed table-hover" ng-show="bothBusNameAndBookAreSelected()">
-      <thead>
-        <caption><strong>Interactions for {{businessName}} in {{miscReportOptions.month}}/{{miscReportOptions.year}} from {{book}}</strong></caption>
-        <tr><th>Interaction</th><th>Count</th>
-      </thead>
-      <tbody>
-        <tr ng-repeat="interaction in interactionsByBook">
-          <td>{{interaction.action}}</td>
-          <td>{{interaction.action_count}}</td>
-        </tr>
-      </tbody>
-    </table>
+<div class="panel  panel-info">
+  <div class="panel-heading">
+    <div class="panel-title"><h2>Book Interaction Reports</h2></div>
   </div>
-  <div class="span6">
-    <div google-chart chart="impressionsByChannelAndBookChart" />
-    <collapsable-chart-details data="impressionsByChannelAndBookChart"></collapsable-chart-details>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-6">
+        <table class="table table-bordered table-striped table-condensed table-hover" ng-show="bothBusNameAndBookAreSelected()">
+          <thead>
+            <caption><strong>Interactions for {{businessName}} in {{miscReportOptions.month}}/{{miscReportOptions.year}} from {{book}}</strong></caption>
+            <tr><th>Interaction</th><th>Count</th>
+          </thead>
+          <tbody>
+            <tr ng-repeat="interaction in interactionsByBook">
+              <td>{{interaction.action}}</td>
+              <td>{{interaction.action_count}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-6">
+        <div google-chart chart="impressionsByChannelAndBookChart" />
+        <collapsable-chart-details data="impressionsByChannelAndBookChart"></collapsable-chart-details>
+      </div>
+    </div>
   </div>
 </div>

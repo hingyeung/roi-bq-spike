@@ -1,21 +1,27 @@
-<h2>State Rollup Reports</h2>
-<div class="row-fluid">
-  <div class="span6">
-    <table class="table table-bordered table-striped table-condensed table-hover" ng-show="bothBusNameAndStateAreSelected()">
-      <thead>
-        <caption><strong>Total Monthly Usage in {{state}} - {{month}}/{{year}}</strong></caption>
-        <tr><th>Book</th><th>Impressions</th><th>EUC</th><th>MIC</th><th>PAC</th><th>STM</th></tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="book in booksInState">
-          <td>{{book}}</td>
-          <td>{{stateReport[book].impressions}}</td>
-          <td>{{stateReport[book].EUC}}</td>
-          <td>{{stateReport[book].MIC}}</td>
-          <td>{{stateReport[book].PAC}}</td>
-          <td>{{stateReport[book].STM}}</td>
-        </tr>
-      </tbody>
-    </table>
+<div class="panel  panel-info">
+  <div class="panel-heading">
+    <div class="panel-title"><h2>State Rollup Reports</h2></div>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-12">
+        <table class="table table-bordered table-striped table-condensed table-hover" ng-show="bothBusNameAndStateAreSelected()">
+          <thead>
+            <caption><strong>Total Monthly Usage in {{state}} - {{month}}/{{year}}</strong></caption>
+            <tr><th>Book</th><th>Impressions</th><th>EUC</th><th>MIC</th><th>PAC</th><th>STM</th></tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="book in booksInState">
+              <td>{{book}}</td>
+              <td>{{stateReport[book].impressions}}</td>
+              <td>{{stateReport[book].EUC}}</td>
+              <td>{{stateReport[book].MIC}}</td>
+              <td>{{stateReport[book].PAC}}</td>
+              <td>{{stateReport[book].STM}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>

@@ -25,6 +25,18 @@ angular.module('roiBigQuerySpike')
         return route === $location.path();
     };
 
+    $scope.setBusinessName = function(businessName) {
+        $scope.businessName = businessName;
+    };
+
+    $scope.setState = function(state) {
+        $scope.state = state;
+    };
+
+    $scope.setBook = function(book) {
+        $scope.book = book;
+    };
+
     $scope.books = [];
     for (var idx = 0; idx < 10; idx++) {
         $scope.books.push('BOOK' + idx);
