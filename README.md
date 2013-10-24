@@ -1,4 +1,4 @@
 roi-bq-spike
 ============
 
-ROI with BigQuery Spike
+Generate real-time ROI reports using BigQuery.
