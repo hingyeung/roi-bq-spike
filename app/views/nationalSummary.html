@@ -4,7 +4,7 @@
   </div>
   <div class="panel-body">
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-12">
         <p class="text-center" ng-show="isLoadingRecentImpressions == false && businessName">Total Appearances Nationally: {{lastMonthTotalImpressions}}</p>
         <div class="row">
           <div class="col-md-offset-3 col-md-6">
@@ -15,10 +15,12 @@
             </div>
           </div>
         </div>
-        <div google-chart chart="recentTotalImpressionsChart" />
+        <div google-chart chart="recentTotalImpressionsChart" style="{{chart.cssStyle}}"/>
         <collapsable-chart-details data="recentTotalImpressionsChart"></collapsable-chart-details>
       </div>
-      <div class="col-md-6">
+    </div>
+    <div class="row">
+      <div class="col-md-12">
         <p class="text-center" ng-show="isLoadingRecentInteractions == false && businessName">Total Interactions Nationally: {{lastMonthTotalInteractions}}</p>
         <div class="col-md-offset-3 col-md-6">
           <div class="progress progress-striped active" ng-show="isLoadingRecentInteractions == true">
@@ -27,7 +29,7 @@
             </div>
           </div>
         </div>
-        <div google-chart chart="recentTotalInteractionsChart" />
+        <div google-chart chart="recentTotalInteractionsChart" style="{{chart.cssStyle}}"/>
         <collapsable-chart-details data="recentTotalInteractionsChart"></collapsable-chart-details>
       </div>
     </div>
