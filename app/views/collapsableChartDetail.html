@@ -2,7 +2,7 @@
   <!-- notice the function call, this binding is read only -->
   <!-- data() -->
   <button ng-show="data().query" class="btn" ng-click="data().isDetailsExpanded = !data().isDetailsExpanded">Details</button>
-  <div collapse="!data().isDetailsExpanded">
+  <div ng-show="data().isDetailsExpanded">
     <div class="well well-large">
       <blockquote><p>{{data().query}}</p></blockquote>
       <div ng-show="!data().cacheHit">
