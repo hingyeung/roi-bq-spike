@@ -4,3 +4,4 @@ dist
 .sass-cache
 #app/bower_components
 roi-spike-privatekey.pem
+roi-bigquery-spike-full.sublime-workspace

@@ -6,6 +6,7 @@ angular.module('roiBigQuerySpike')
 
     $scope.isLoadingRecentImpressions = false;
     $scope.isLoadingRecentInteractions = false;
+    $scope.forceRedraw = false;
     
     var fetchRecentImpressionsForBusiness = function() {
       $scope.isLoadingRecentImpressions = true;
@@ -57,6 +58,19 @@ angular.module('roiBigQuerySpike')
       });
     };
 
+    // $scope.shouldForceRedraw = function() {
+    //   return $scope.forceRedraw;
+    // }
+
+    // $scope.nextClicked = function() {
+    //   console.log('next clicked');
+    //   $scope.forceRedraw = true;
+    // };
+
+    // $scope.prevClicked = function() {
+    //   $scope.forceRedraw = true;
+    // };
+
     // TODO: the following two watches are repeated in every controller
     $scope.$watch('businessName', function() {
       if (!$scope.businessName) return;
@@ -64,4 +78,33 @@ angular.module('roiBigQuerySpike')
       fetchRecentImpressionsForBusiness();
       fetchRecentInteractionsForBusiness();
     });
+
+    angular.element('.carousel').bind('slide.bs.carousel', function() {
+      console.log('controller got slide start event');
+      $scope.$apply(function() {
+        $scope.forceRedraw = true;
+      });
+    });
+
+    angular.element('.carousel').bind('slid', function () {
+        console.log('controller got the transistion finished event');
+        $scope.$apply(function() {
+          $scope.forceRedraw = false;
+        });
+    });
   }]);
+
+
+// jQuery('.carousel').on('slid.bs.carousel', function () {
+//   console.log('controller got the slide event');
+// });
+
+// jQuery('.carousel').on('slid', function () {
+//   console.log('controller got the slide event');
+// });
+
+// jQuery('.navbar').on('click', function () {
+//   console.log('controller got the click event');
+// });
+
+// console.log(jQuery('#myCarousel'));

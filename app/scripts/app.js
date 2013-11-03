@@ -5,7 +5,7 @@ google.setOnLoadCallback(function () {
 });
 google.load('visualization', '1', {packages: ['corechart']});
 
-angular.module('roiBigQuerySpike', ['googlechart.directives', 'ui.bootstrap'])
+angular.module('roiBigQuerySpike', ['googlechart'])
   .config(function ($routeProvider) {
     $routeProvider
       .when('/v2', {

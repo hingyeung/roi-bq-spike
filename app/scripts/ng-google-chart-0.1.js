@@ -12,7 +12,8 @@
         return {
             restrict: 'A',
             scope: {
-                chart: '=chart'
+                chart: '=chart',
+                redrawOn: '=redrawOn'
             },
             link: function ($scope, $elm, $attr) {
                 // Watches, to refresh the chart when its data, title or dimensions change
@@ -24,6 +25,13 @@
                 angular.element($window).bind('resize', function () {
                     draw();
                 });
+
+                // Redraw the chart if the "redrawOn" is true
+                $scope.$watch('redrawOn', function () {
+                    if ($scope.redrawOn) return;
+                    draw();
+                });
+
 
                 function draw() {
                     if (!draw.triggered && ($scope.chart != undefined)) {
