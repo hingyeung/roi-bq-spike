@@ -1,0 +1,13 @@
+{
+	"folders":
+	[
+		{
+			"path": "/Users/samli/dev/roi-bigquery-spike-full",
+      "folder_exclude_patterns": ["dist", "node_modules", "bower_components"]
+		}
+	],
+  "settings":
+  {
+      "tab_size": 2
+  }
+}
