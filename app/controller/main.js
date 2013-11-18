@@ -31,6 +31,10 @@ angular.module('roiBigQuerySpike')
 
     $scope.setState = function(state) {
         $scope.state = state;
+        $scope.books = [];
+        for (var idx = 0; idx < 10; idx++) {
+            $scope.books.push($scope.state + idx);
+        }
     };
 
     $scope.setBook = function(book) {
@@ -38,7 +42,4 @@ angular.module('roiBigQuerySpike')
     };
 
     $scope.books = [];
-    for (var idx = 0; idx < 10; idx++) {
-        $scope.books.push('BOOK' + idx);
-    }
   }]);

@@ -3,7 +3,7 @@ var https = require('https')
   , fs = require('fs')
   , bigquery = require('google-bigquery')
   , ROI_PROJECT_ID = 'samuelli.net:roispike'
-  , DATA_SET = 'fake_roi_data'
+  , DATA_SET = 'fake_roi_12month_data'
   , bqClient = bigquery({
         "iss": '361723984999@developer.gserviceaccount.com',
         "key": fs.readFileSync('roi-spike-privatekey.pem', 'utf8')
@@ -23,6 +23,18 @@ var https = require('https')
 
     businessNames = data.toString().split("\n");
   });
+
+  var ACTION_TABLES = [],
+      DIRECT_IMPRESSION_TABLES = [],
+      SEARCH_IMPRESSION_TABLES = [];
+  for (var i = 1; i < 12; i++) {
+    ACTION_TABLES.push(DATA_SET + '.fake_actions_2013_' + i);
+    DIRECT_IMPRESSION_TABLES.push(DATA_SET + '.fake_direct_impressions_2013_' + i);
+    SEARCH_IMPRESSION_TABLES.push(DATA_SET + '.fake_search_impressions_2013_' + i);
+  }
+  ACTION_TABLES.join(',');
+  DIRECT_IMPRESSION_TABLES.join(',');
+  SEARCH_IMPRESSION_TABLES.join(',');
 
 exports.getTenRandomBusinessNames = function(req, res) {
   var names = [];
@@ -53,7 +65,7 @@ exports.getInteractionsPerBook = function(req, res) {
     , year = req.params.year
     , month = req.params.month
     , query = 'select book, action, count(action) as action_count ' +
-      ' from ' + DATA_SET + '.actions ' +
+      ' from ' + ACTION_TABLES +
       ' where business = "' + businessName + '"' +
       ' and state = "' + state + '" ' +
       ' and year = ' + year + ' ' +
@@ -73,7 +85,7 @@ exports.getInteractionForBusinessByBook = function(req, res) {
     , year = req.params.year
     , month = req.params.month
     , query = 'select action, count(action) as action_count ' +
-      ' from ' + DATA_SET + '.actions ' +
+      ' from ' + ACTION_TABLES +
       ' where business = "' + businessName + '"' +
       ' and book = "' + book + '" ' +
       ' and year = ' + year + ' ' +
@@ -92,7 +104,8 @@ exports.getRecentInteractionsForBusinessByBook = function(req, res) {
 
   var businessName = req.params.businessName
     , book = req.params.book
-    , query = 'SELECT year, month, action, count(action) as action_count from [' + DATA_SET + '.actions]' +
+    , query = 'SELECT year, month, action, count(action) as action_count ' +
+    ' from ' + ACTION_TABLES +
     ' WHERE business = "' + businessName + '" ' +
     ' AND book = "' + book + '" ' +
     ' AND timestamp >= TIMESTAMP("' + fromDate.getFullYear() + '-' + (fromDate.getMonth() + 1) + '-01") ' +
@@ -111,7 +124,8 @@ exports.getRecentInteractionsForBusiness = function(req, res) {
   fromDate.setMonth(fromDate.getMonth() - 6);
 
   var businessName = req.params.businessName
-    , query = 'SELECT year, month, count(action) as action_count from [' + DATA_SET + '.actions]' +
+    , query = 'SELECT year, month, count(action) as action_count ' +
+    ' from ' + ACTION_TABLES +
     ' WHERE business = "' + businessName + '" ' +
     ' AND timestamp >= TIMESTAMP("' + fromDate.getFullYear() + '-' + (fromDate.getMonth() + 1) + '-01") ' +
     ' AND timestamp < TIMESTAMP("' + toDate.getFullYear() + '-' + (toDate.getMonth() + 1) + '-01") ' +
@@ -128,7 +142,7 @@ exports.getImpressionsPerChannelByBook = function(req, res) {
     , year = req.params.year
     , month = req.params.month
     , query = 'select channel, count(channel) as impression_count ' +
-        ' from ' + DATA_SET + '.search_impressions, ' + DATA_SET + '.direct_impressions ' +
+        ' from ' + SEARCH_IMPRESSION_TABLES + ', ' + DIRECT_IMPRESSION_TABLES +
         ' where business = "' + businessName + '" ' +
         ' and book = "' + book + '" ' +
         ' and year = ' + year + ' and month = ' + month + ' ' +
@@ -144,7 +158,7 @@ exports.getImpressionsPerBook = function(req, res) {
     , year = req.params.year
     , month = req.params.month
     , query = 'select book, count(book) as impression_count ' +
-        ' from ' + DATA_SET + '.search_impressions, ' + DATA_SET + '.direct_impressions ' +
+        ' from ' + SEARCH_IMPRESSION_TABLES + ', ' + DIRECT_IMPRESSION_TABLES +
         ' where business = "' + businessName + '" ' +
         ' and state = "' + state + '" ' +
         ' and year = ' + year + ' and month = ' + month + ' ' +
@@ -162,7 +176,7 @@ exports.getAllRecentImpressionsForBusiness = function(req, res) {
 
   var businessName = req.params.businessName
     , query = 'select year, month, count(*) as impression_count ' +
-    ' from ' + DATA_SET + '.direct_impressions,' + DATA_SET + '.search_impressions ' +
+    ' from ' + SEARCH_IMPRESSION_TABLES + ', ' + DIRECT_IMPRESSION_TABLES +
     ' where business ="' + businessName + '"' +
     ' AND timestamp >= TIMESTAMP("' + fromDate.getFullYear() + '-' + (fromDate.getMonth() + 1) + '-01") ' +
     ' AND timestamp < TIMESTAMP("' + toDate.getFullYear() + '-' + (toDate.getMonth() + 1) + '-01") ' +
@@ -182,7 +196,7 @@ exports.getAllRecentImpressionsForBusinessByBook = function(req, res) {
   var businessName = req.params.businessName
     , book = req.params.book
     , query = 'select year, month, count(*) as impression_count ' +
-    ' from ' + DATA_SET + '.direct_impressions,' + DATA_SET + '.search_impressions ' +
+    ' from ' + SEARCH_IMPRESSION_TABLES + ', ' + DIRECT_IMPRESSION_TABLES +
     ' where business ="' + businessName + '"' +
     ' AND book = "' + book + '" ' +
     ' AND timestamp >= TIMESTAMP("' + fromDate.getFullYear() + '-' + (fromDate.getMonth() + 1) + '-01") ' +
