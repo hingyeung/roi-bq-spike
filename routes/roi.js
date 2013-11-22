@@ -158,7 +158,16 @@ exports.getAllRecentImpressionsForBusiness = function(req, res) {
   console.log('getAllRecentImpressionsForBusiness');
   var toDate = new Date()
     , fromDate = new Date();
-  fromDate.setMonth(fromDate.getMonth() - 6);
+
+  if (req.params.startYear) {
+    fromDate.setYear(req.params.startYear);
+    fromDate.setMonth(req.params.startMonth);
+    toDate.setYear(req.params.endYear);
+    toDate.setMonth(req.params.endMonth);
+  }
+  else {
+    fromDate.setMonth(fromDate.getMonth() - 6);  
+  }
 
   var businessName = req.params.businessName
     , query = 'select year, month, count(*) as impression_count ' +

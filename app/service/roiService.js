@@ -34,8 +34,12 @@ angular.module('roiBigQuerySpike')
       return $http.get('http://localhost:9000/roi/impressions/' + businessName + '/' + book);
     };
 
-    this.fetchRecentImpressionsForBusiness = function(businessName) {
-      return $http.get('http://localhost:9000/roi/impressions/' + businessName);
+    this.fetchRecentImpressionsForBusiness = function(businessName, startDate, endDate) {
+      var url = 'http://localhost:9000/roi/impressions/' + businessName;
+      if (startDate && endDate) {
+        url = url + '/' + startDate.getFullYear() + '/' + startDate.getMonth() + '/' + endDate.getFullYear() + '/' + endDate.getMonth();
+      }
+      return $http.get(url);
     };
 
     this.fetchDataForStateRollupReport = function(businessName, state, year, month) {

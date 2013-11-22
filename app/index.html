@@ -17,6 +17,7 @@
         <link rel="stylesheet" href="styles/flat-ui.css" -->
         <link rel="stylesheet" href="styles/roispike.css">
         <link rel="stylesheet" href="bower_components/bootstrap/distribute/css/bootstrap.min.css">
+        <link rel="stylesheet" href="styles/datepicker.css">
         <!-- endbuild -->
 </head>
   <body ng-controller="MainCtrl">
@@ -64,6 +65,10 @@
             </ul>
           </li>
         </ul>
+        <div class="nav navbar-nav date">
+          <input id="start-date" class="form-control" type="text" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months" placeholder="Start Date"></input>
+          <input id="end-date" class="form-control" type="text" data-date-format="mm/yyyy"  data-date-viewmode="years" data-date-minviewmode="months" placeholder="End Date"/></input>
+        </div>
       </div><!-- /.navbar-collapse -->
     </nav>
 
@@ -92,6 +97,7 @@
     <script src="bower_components/jquery/jquery.js"></script>
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/bootstrap/distribute/js/bootstrap.min.js"></script>
+    <script src="scripts/bootstrap-datepicker.js"></script>
     <!--script src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script-->
     <!--script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>

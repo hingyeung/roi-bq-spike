@@ -5,3 +5,12 @@
 .panel .progress {
   margin-top: 100px;
 }
+
+.date {
+	padding: 8px 5px;
+}
+
+.date .form-control {
+    display: inline-block;
+    width: 150px;
+}

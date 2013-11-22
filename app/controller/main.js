@@ -12,6 +12,39 @@ angular.module('roiBigQuerySpike')
     // });
     // return only 1 busines name for debugging purpose
     $scope.businessNames = ['Sed Neque Inc.'];
+    $scope.reportBetween = {};
+
+    var startDate, endDate;
+
+    startDate = $('#start-date').datepicker({
+        viewMode: 'years',
+        minViewMode: 'months'
+    }).on('changeDate', function(e) {
+        if (e.date.valueOf() >= endDate.date.valueOf()) {
+            var newDate = new Date(e.date)
+            newDate.setDate(newDate.getDate());
+            newDate.setMonth(newDate.getMonth() + 1);
+            endDate.setValue(newDate);
+            $scope.reportBetween.endDate = endDate.date;
+        }
+        if (startDate.viewMode === 1) {
+            startDate.hide();
+            $scope.reportBetween.startDate = startDate.date;
+            $scope.$apply();
+        }
+    }).data('datepicker');
+    
+    endDate = $('#end-date').datepicker({
+        viewMode: 'years',
+        minViewMode: 'months'
+    }).on('changeDate', function(e) {
+        if (endDate.viewMode === 1) {
+            endDate.hide();
+            $scope.reportBetween.endDate = endDate.date;
+            $scope.$apply();
+        }
+    }).data('datepicker');
+
 
     $scope.bothBusNameAndBookAreSelected = function() {
       return $scope.book && $scope.businessName;

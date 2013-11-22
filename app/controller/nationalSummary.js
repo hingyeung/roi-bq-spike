@@ -10,7 +10,14 @@ angular.module('roiBigQuerySpike')
     
     var fetchRecentImpressionsForBusiness = function() {
       $scope.isLoadingRecentImpressions = true;
-      var promise = Roiservice.fetchRecentImpressionsForBusiness($scope.businessName);
+
+      var startDate, endDate;
+      if ($scope.reportBetween) {
+        startDate = $scope.reportBetween.startDate;
+        endDate = $scope.reportBetween.endDate;
+      }
+
+      var promise = Roiservice.fetchRecentImpressionsForBusiness($scope.businessName, startDate, endDate);
       promise.success(function(resp, status, headers, config) {
         var data = resp.list;
         console.log(data);
@@ -35,7 +42,14 @@ angular.module('roiBigQuerySpike')
 
     var fetchRecentInteractionsForBusiness = function() {
       $scope.isLoadingRecentInteractions = true;
-      var promise = Roiservice.fetchRecentInteractionsForBusiness($scope.businessName);
+
+      var startDate, endDate;
+      if ($scope.reportBetween) {
+        startDate = $scope.reportBetween.startDate;
+        endDate = $scope.reportBetween.endDate;
+      }
+
+      var promise = Roiservice.fetchRecentInteractionsForBusiness($scope.businessName, startDate, endDate);
       promise.success(function(resp, status, headers, config) {
         var data = resp.list;
         console.log(data);
@@ -78,6 +92,13 @@ angular.module('roiBigQuerySpike')
       fetchRecentImpressionsForBusiness();
       fetchRecentInteractionsForBusiness();
     });
+
+    $scope.$watch('reportBetween', function(dates, origDates) {
+      if ($scope.businessName && (dates.startDate && dates.endDate) && (dates.startDate !== origDates.startDate || dates.endDate !== origDates.endDate)) {
+        fetchRecentImpressionsForBusiness();
+        fetchRecentInteractionsForBusiness();
+      }
+    }, true);
 
     angular.element('.carousel').bind('slide.bs.carousel', function() {
       console.log('controller got slide start event');
