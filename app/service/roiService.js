@@ -18,8 +18,12 @@ angular.module('roiBigQuerySpike')
       return $http.get('http://localhost:9000/roi/interactions/' + businessName + '/' + book);
     };
 
-    this.fetchRecentInteractionsForBusiness = function(businessName) {
-      return $http.get('http://localhost:9000/roi/interactions/' + businessName);
+    this.fetchRecentInteractionsForBusiness = function(businessName, startDate, endDate) {
+      var url = 'http://localhost:9000/roi/interactions/' + businessName;
+      if (startDate && endDate) {
+        url = url + '/' + startDate.getFullYear() + '/' + startDate.getMonth() + '/' + endDate.getFullYear() + '/' + endDate.getMonth();
+      }
+      return $http.get(url);
     };
 
     this.fetchInteractionsForBusinessByBookAndDate = function(businessName, book, year, month) {

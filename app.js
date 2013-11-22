@@ -24,7 +24,7 @@ app.get('/', function(request, response) {
 app.get('/roi/10RandomBusinessNames', roi.getTenRandomBusinessNames);
 app.get('/roi/interactions/:businessName/:book/:year/:month', roi.getInteractionForBusinessByBook);
 app.get('/roi/interactions/:businessName/:book', roi.getRecentInteractionsForBusinessByBook);
-app.get('/roi/interactions/:businessName', roi.getRecentInteractionsForBusiness);
+app.get('/roi/interactions/:businessName/:startYear?/:startMonth?/:endYear?/:endMonth?', roi.getRecentInteractionsForBusiness);
 app.get('/roi/interactionsPerBook/:businessName/:state/:year/:month', roi.getInteractionsPerBook);
 app.get('/roi/impressionsPerChannel/:businessName/:book/:year/:month', roi.getImpressionsPerChannelByBook);
 app.get('/roi/impressions/:businessName/:book', roi.getAllRecentImpressionsForBusinessByBook);
