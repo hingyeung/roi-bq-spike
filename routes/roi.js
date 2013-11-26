@@ -175,13 +175,13 @@ exports.getAllRecentImpressionsForBusiness = function(req, res) {
   fromDate.setMonth(fromDate.getMonth() - 6);
 
   var businessName = req.params.businessName
-    , query = 'select year, month, count(*) as impression_count ' +
+    , query = 'select year, month, day, count(*) as impression_count ' +
     ' from ' + SEARCH_IMPRESSION_TABLES + ', ' + DIRECT_IMPRESSION_TABLES +
     ' where business ="' + businessName + '"' +
     ' AND timestamp >= TIMESTAMP("' + fromDate.getFullYear() + '-' + (fromDate.getMonth() + 1) + '-01") ' +
     ' AND timestamp < TIMESTAMP("' + toDate.getFullYear() + '-' + (toDate.getMonth() + 1) + '-01") ' +
-    ' GROUP BY year, month ' +
-    ' ORDER BY year, month';
+    ' GROUP BY year, month, day ' +
+    ' ORDER BY year, month, day';
   console.log(query);
 
   bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));

@@ -14,12 +14,12 @@ angular.module('roiBigQuerySpike')
       promise.success(function(resp, status, headers, config) {
         var data = resp.list;
         console.log(data);
-        $scope.recentTotalImpressionsChart = Roiservice.makeChartData('ColumnChart');
-        $scope.recentTotalImpressionsChart.options.vAxis.title = "Total Appearences";
-        var cols = [{id: "date", label: "Date", type: "string"}, {id:"count", label:"Count", type:"number"}]
+        $scope.recentTotalImpressionsChart = Roiservice.makeChartData('LineChart');
+        $scope.recentTotalImpressionsChart.options.vAxis.title = "Total Appearances";
+        var cols = [{id: "date", label: "Date", type: "date"}, {id:"count", label:"Count", type:"number"}]
           , rows = [];
         for (var idx = 0; idx < data.length; idx++) {
-          rows.push({c: [ { v: data[idx].month + "/" + data[idx].year }, { v: data[idx].impression_count } ]});
+          rows.push({c: [ { v: new Date(data[idx].year, data[idx].month, data[idx].day) }, { v: data[idx].impression_count } ]});
         }
         $scope.recentTotalImpressionsChart.data = {rows: rows, cols: cols};
         $scope.recentTotalImpressionsChart.query = resp.query;
@@ -28,6 +28,7 @@ angular.module('roiBigQuerySpike')
         $scope.recentTotalImpressionsChart.options.title = 'Recent Appearences for ' + $scope.businessName;
         $scope.lastMonthTotalImpressions = data.length > 0 ? data[data.length - 1].impression_count : 0;
         $scope.isLoadingRecentImpressions = false;
+
       }).error(function(resp, status, headers, config) {
         console.log('Failed to download recent impressions');
       });
