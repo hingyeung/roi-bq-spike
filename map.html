@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 }
+      #map-canvas { height: 100% }
+    </style>
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDT85tldX5eB_5fV0wmi9JC3UpdQ0dQ2DE&sensor=false&libraries=visualization">
+    </script>
+    <script type="text/javascript">
+      function initialize() {
+
+
+
+var suburbInfo = [
+                    {suburb: "Sydney, NSW, Australia", searches: 180},
+                    {suburb: "Melbourne, VIC, Australia", searches: 300},
+                    {suburb: "Oakleigh, VIC, Australia", searches: 80},
+                    {suburb: "Rockbank, VIC, Australia", searches: 100},
+                    {suburb: "Laverton, VIC, Australia", searches: 200},
+                    {suburb: "Geelong, VIC, Australia", searches: 300},
+                    {suburb: "Perth, WA, Australia", searches: 40},
+                    {suburb: "Darwin, NT, Australia", searches: 40}
+                  ]
+
+//real map
+
+map = new google.maps.Map(document.getElementById('map-canvas'), {
+  center: new google.maps.LatLng(-24.846565, 132.789001),
+  zoom: 4
+});
+
+
+//heat map
+
+heatMapData = [];
+
+
+var addGeocodeToHeatmap = function(results, status) {
+  if (status == google.maps.GeocoderStatus.OK)
+  {
+      console.log("adding " + this.suburb + " with weight " + this.searches);
+      heatMapData.push({location: results[0].geometry.location, weight: this.searches});
+  }
+};
+
+var geocoder = new google.maps.Geocoder();
+
+suburbInfo.map( function(suburbInfo) {
+     geocoder.geocode({ 'address': suburbInfo.suburb}, addGeocodeToHeatmap.bind(suburbInfo));
+})
+
+//heatmap.set('dissipate', true);
+
+setTimeout(function(){
+  console.log(heatMapData);
+  var heatmap = new google.maps.visualization.HeatmapLayer({
+  data: heatMapData
+});
+  heatmap.setMap(map)}, 4000);
+}
+google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+  </head>
+  <body>
+    <div id="map-canvas"/>
+  </body>
+</html>
