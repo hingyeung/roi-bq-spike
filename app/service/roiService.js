@@ -42,8 +42,9 @@ angular.module('roiBigQuerySpike')
       return $http.get('http://localhost:9000/roi/impressions/' + businessName);
     };
 
-    this.fetchSearchImpressionsByLocationForBusiness = function(businessName) {
-      return $http.get('http://localhost:9000/roi/searchImpressionLocations/' + businessName);
+    this.fetchSearchImpressionsByLocationForBusiness = function(businessName, limit) {
+      limit = limit || 8;
+      return $http.get('http://localhost:9000/roi/searchImpressionLocations/' + businessName + "/" + limit);
     };
 
     this.fetchDataForStateRollupReport = function(businessName, state, year, month) {

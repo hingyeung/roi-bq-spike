@@ -31,7 +31,7 @@ angular.module('roiBigQuerySpike')
         var chartData = [];
 
         for(var x = 0; x < resp.list.length; x++) {
-          chartData.push([resp.list[x].ssub, parseInt(resp.list[x].impression_count, 10)]);
+          chartData.push([resp.list[x].suburb, parseInt(resp.list[x].impression_count, 10)]);
         }
 
         drawChart();
@@ -43,7 +43,7 @@ angular.module('roiBigQuerySpike')
           data.addColumn('number', 'Impressions');
           data.addRows(chartData);
 
-          var options = {'title':'Top 8 most common search locations',
+          var options = {'title':'Top 8 most common search locations users are searching from, for "' + $scope.businessName + '"',
                          'width':800,
                          'height':600};
 

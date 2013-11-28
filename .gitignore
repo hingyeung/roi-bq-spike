@@ -5,3 +5,5 @@ dist
 #app/bower_components
 roi-spike-privatekey.pem
 roi-bigquery-spike-full.sublime-workspace
+.idea
+

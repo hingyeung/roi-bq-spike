@@ -209,35 +209,34 @@ exports.getAllRecentImpressionsForBusiness = function(req, res) {
 };
 
 
-//select ssub, count(ssub) as impression_count  from [12months_fake_roi_data_20131127.fake_search_impressions_2013_11]  where timestamp >= TIMESTAMP("2013-5-01")  AND timestamp < TIMESTAMP("2013-11-01")  GROUP BY ssub ORDER BY ssub
+/*select ssub, state, count(ssub) search_count
+from [12months_fake_roi_data_20131127.fake_search_impressions_2013_11]
+where business == 'Mobil Oil Australia'
+group by ssub, state
+order by search_count desc*/
+
+exports.getSearchImpressions = function(req, res) {
+  var businessName = req.params.businessName
+    , query = 'select ssub as suburb, count(ssub) as impression_count ' +
+    ' from ' + SEARCH_IMPRESSION_TABLES +
+    ' where business ="' + businessName + '"' +
+    ' GROUP BY suburb' +
+    ' ORDER BY impression_count desc' +
+    ' LIMIT 1000';
+
+  bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
+}
 
 exports.getSearchImpressionsByLocation = function(req, res) {
   console.log('getSearchImpressionsByLocation');
-  var toDate = new Date()
-    , fromDate = new Date();
-  fromDate.setMonth(fromDate.getMonth() - 6);
-
-  var businessName = req.params.businessName
-    , query = 'select ssub, count(ssub) as impression_count ' +
-    ' from ' +
-           '[12months_fake_roi_data_20131127.fake_search_impressions_2013_1]' +
-          ',[12months_fake_roi_data_20131127.fake_search_impressions_2013_2]' +
-          ',[12months_fake_roi_data_20131127.fake_search_impressions_2013_3]' +
-          ',[12months_fake_roi_data_20131127.fake_search_impressions_2013_4]' +
-          ',[12months_fake_roi_data_20131127.fake_search_impressions_2013_5]' +
-          ',[12months_fake_roi_data_20131127.fake_search_impressions_2013_6]' +
-          ',[12months_fake_roi_data_20131127.fake_search_impressions_2013_7]' +
-          ',[12months_fake_roi_data_20131127.fake_search_impressions_2013_8]' +
-          ',[12months_fake_roi_data_20131127.fake_search_impressions_2013_9]' +
-          ',[12months_fake_roi_data_20131127.fake_search_impressions_2013_10]' +
-          ',[12months_fake_roi_data_20131127.fake_search_impressions_2013_11]' +
-          ',[12months_fake_roi_data_20131127.fake_search_impressions_2013_12]' +
+  var businessName = req.params.businessName,
+      limit = req.params.limit,
+      query = 'select ssub as suburb, count(ssub) as impression_count ' +
+    ' from ' + SEARCH_IMPRESSION_TABLES +
     ' where business ="' + businessName + '"' +
-    ' AND timestamp >= TIMESTAMP("' + fromDate.getFullYear() + '-' + (fromDate.getMonth() + 1) + '-01") ' +
-    ' AND timestamp < TIMESTAMP("' + toDate.getFullYear() + '-' + (toDate.getMonth() + 1) + '-01") ' +
-    ' GROUP BY ssub' +
+    ' GROUP BY suburb' +
     ' ORDER BY impression_count desc' +
-    ' LIMIT 8';
+    ' LIMIT ' + limit;
   console.log(query);
 
   bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
