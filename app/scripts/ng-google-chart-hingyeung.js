@@ -234,8 +234,7 @@
                                        // 1 day in milliseconds = 24 * 60 * 60 * 1000 = 86,400,000
                                        'minRangeSize': 86400000
                                      }
-                                   },
-                                   'state': {'range': {'start': new Date(2013, 1, 9), 'end': new Date()}}
+                                   }
                                 });
 
                                 // bind dashboard          
