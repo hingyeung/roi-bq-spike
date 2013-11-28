@@ -45,6 +45,8 @@ ChartData.prototype.transformToGoogleChartData = function() {
 
 ChartData.prototype.addColumn = function(id, label, type, rows) {
 	this.chart.columnDefinition.push( { id: id, label: label, type: type } );
+	this.chart.columnDefinition.push( { type: "boolean", role: "certainty" } );
+	this.chart.columnDefinition.push( { type: "boolean", role: "emphasis"} );
 
 	for (var i = 0; i < rows.length; i++) {
 		var row = rows[i];
@@ -54,5 +56,7 @@ ChartData.prototype.addColumn = function(id, label, type, rows) {
 			this.chart.data[row.key] = existingRow;
 		}
 		existingRow.push(row.value);
+		existingRow.push(id.indexOf("average") === -1); // certainty - false = dashed
+		existingRow.push(id.indexOf("interactions") !== -1); // emphasis - true = bold
 	}
 };
