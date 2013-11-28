@@ -35,6 +35,7 @@ app.get('/roi/impressions/:businessName/:book', roi.getAllRecentImpressionsForBu
 app.get('/roi/impressions/:businessName', roi.getAllRecentImpressionsForBusiness);
 app.get('/roi/impressionsPerBook/:businessName/:state/:year/:month', roi.getImpressionsPerBook);
 app.get('/roi/searchImpressionLocations/:businessName/:limit', roi.getSearchImpressionsByLocation);
+app.get('/roi/searchImpressionTimes/:businessName', roi.getDirectImpressionsByTime);
 
 
 // var port = process.env.PORT || 5000;

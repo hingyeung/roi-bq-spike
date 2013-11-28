@@ -272,7 +272,7 @@ exports.getSearchImpressionsByLocation = function(req, res) {
 exports.getDirectImpressionsByTime = function(req, res) {
   console.log('getdirectimpresions by time');
   var businessName = req.params.businessName,
-      query = 'select hour count(hour) impression_count' +
+      query = 'select hour, count(hour) impression_count' +
     ' from ' + SEARCH_IMPRESSION_TABLES + ", " + DIRECT_IMPRESSION_TABLES + ", " + ACTION_TABLES +
     ' where business ="' + businessName + '"' +
     ' GROUP BY hour' +
