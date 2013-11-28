@@ -3,7 +3,7 @@ var https = require('https')
   , fs = require('fs')
   , bigquery = require('google-bigquery')
   , ROI_PROJECT_ID = 'samuelli.net:roispike'
-  , DATA_SET = 'fake_roi_12month_data'
+  , DATA_SET = '12months_fake_roi_data_20131127'
   , bqClient = bigquery({
         "iss": '361723984999@developer.gserviceaccount.com',
         "key": fs.readFileSync('roi-spike-privatekey.pem', 'utf8')
@@ -28,9 +28,9 @@ var https = require('https')
       DIRECT_IMPRESSION_TABLES = [],
       SEARCH_IMPRESSION_TABLES = [];
   for (var i = 1; i < 12; i++) {
-    ACTION_TABLES.push(DATA_SET + '.fake_actions_2013_' + i);
-    DIRECT_IMPRESSION_TABLES.push(DATA_SET + '.fake_direct_impressions_2013_' + i);
-    SEARCH_IMPRESSION_TABLES.push(DATA_SET + '.fake_search_impressions_2013_' + i);
+    ACTION_TABLES.push('[' + DATA_SET + '.fake_actions_2013_' + i + ']');
+    DIRECT_IMPRESSION_TABLES.push('[' + DATA_SET + '.fake_direct_impressions_2013_' + i +']');
+    SEARCH_IMPRESSION_TABLES.push('[' + DATA_SET + '.fake_search_impressions_2013_' + i + ']');
   }
   ACTION_TABLES.join(',');
   DIRECT_IMPRESSION_TABLES.join(',');
