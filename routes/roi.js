@@ -208,36 +208,36 @@ exports.getAllRecentImpressionsForBusiness = function(req, res) {
   bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
 };
 
-
-/*select ssub, state, count(ssub) search_count
-from [12months_fake_roi_data_20131127.fake_search_impressions_2013_11]
-where business == 'Mobil Oil Australia'
-group by ssub, state
-order by search_count desc*/
-
-exports.getSearchImpressions = function(req, res) {
-  var businessName = req.params.businessName
-    , query = 'select ssub as suburb, count(ssub) as impression_count ' +
-    ' from ' + SEARCH_IMPRESSION_TABLES +
-    ' where business ="' + businessName + '"' +
-    ' GROUP BY suburb' +
-    ' ORDER BY impression_count desc' +
-    ' LIMIT 1000';
-
-  bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
-}
-
 exports.getSearchImpressionsByLocation = function(req, res) {
   console.log('getSearchImpressionsByLocation');
-  var businessName = req.params.businessName,
-      limit = req.params.limit,
-      query = 'select ssub as suburb, count(ssub) as impression_count ' +
+  var businessName = req.params.businessName
+    , limit = req.params.limit
+    , query = 'select ssub as suburb, state, count(ssub) as impression_count ' +
     ' from ' + SEARCH_IMPRESSION_TABLES +
     ' where business ="' + businessName + '"' +
-    ' GROUP BY suburb' +
+    ' GROUP BY suburb, state' +
     ' ORDER BY impression_count desc' +
     ' LIMIT ' + limit;
-  console.log(query);
+  console.log("query: " + query);
+
+  bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
+};
+
+//select hour, count(*) impression_count
+//from [12months_fake_roi_data_20131127.fake_search_impressions_2013_11]
+//where business == 'Mobil Oil Australia'
+//group by hour
+//order by hour desc;
+
+exports.getDirectImpressionsByTime = function(req, res) {
+  console.log('getdirectimpresions by time');
+  var businessName = req.params.businessName,
+      query = 'select hour count(hour) impression_count' +
+    ' from ' + SEARCH_IMPRESSION_TABLES + ", " + DIRECT_IMPRESSION_TABLES + ", " + ACTION_TABLES +
+    ' where business ="' + businessName + '"' +
+    ' GROUP BY hour' +
+    ' ORDER BY hour desc';
+  console.log("query: ", query);
 
   bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
 };
