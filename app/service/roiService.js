@@ -26,6 +26,18 @@ angular.module('roiBigQuerySpike')
       return $http.get('http://localhost:9000/roi/impressions/channel/' + businessName);
     };
 
+    this.fetchRecentInteractionsForBusinessPerChannel = function(businessName) {
+      return $http.get('http://localhost:9000/roi/interactions/channel/' + businessName);
+    };
+
+    this.fetchAverageImpressionsPerChannel = function() {
+      return $http.get('http://localhost:9000/roi/impressions/average/channel');
+    };
+
+    this.fetchAverageInteractionsPerChannel = function() {
+      return $http.get('http://localhost:9000/roi/interactions/average/channel');
+    };
+
     this.fetchInteractionsForBusinessByBookAndDate = function(businessName, book, year, month) {
       return $http.get('http://localhost:9000/roi/interactions/' + businessName +'/' + book + '/' + year + '/' + month);
     };

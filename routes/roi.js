@@ -52,7 +52,7 @@ var bigQueryCallback = function(res) {
       res.send(err);
       return;
     }
-    console.log(resp);
+    // console.log(resp);
     res.contentType('application/json');
     res.send(resp);
   };
@@ -119,18 +119,44 @@ exports.getRecentInteractionsForBusinessByBook = function(req, res) {
 
 exports.getRecentInteractionsForBusiness = function(req, res) {
   console.log('getRecentInteractionsForBusiness');
-  var toDate = new Date()
-    , fromDate = new Date();
-  fromDate.setMonth(fromDate.getMonth() - 6);
 
   var businessName = req.params.businessName
     , query = 'SELECT year, month, day, count(action) as action_count ' +
     ' from ' + ACTION_TABLES +
     ' WHERE business = "' + businessName + '" ' +
-    ' AND timestamp >= TIMESTAMP("' + fromDate.getFullYear() + '-' + (fromDate.getMonth() + 1) + '-01") ' +
-    ' AND timestamp < TIMESTAMP("' + toDate.getFullYear() + '-' + (toDate.getMonth() + 1) + '-01") ' +
     ' GROUP BY year, month, day ' +
     ' ORDER BY year, month, day';
+  console.log(query);
+
+  bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
+};
+
+exports.getRecentInteractionsForBusinessPerChannel = function(req, res) {
+  console.log('getRecentInteractionsForBusinessByChannel');
+
+  var businessName = req.params.businessName
+    , query = 'SELECT year, month, day, channel, count(1) as action_count ' +
+    ' from ' + ACTION_TABLES +
+    ' WHERE business = "' + businessName + '" ' +
+    ' AND channel in ("MOB", "WP") ' +
+    ' GROUP BY year, month, day, channel ' +
+    ' ORDER BY year, month, day, channel';
+  console.log(query);
+
+  bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
+};
+
+exports.getAverageInteractionsPerChannel = function(req, res) {
+  console.log('getAverageInteractionsPerChannel');
+
+  var query = 'SELECT year, month, day, channel, avg(actions) average_interactions' +
+    ' FROM ( ' +
+      ' SELECT business, year, month, day, channel, count(1) as actions ' +
+      ' FROM ' + ACTION_TABLES + 
+      ' WHERE channel in ("MOB", "WP") ' +
+      ' GROUP BY channel, business, year, month, day) ' +
+    ' GROUP BY channel, year, month, day ' +
+    ' ORDER BY channel, year, month, day';
   console.log(query);
 
   bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
@@ -148,10 +174,24 @@ exports.getRecentImpressionsForBusinessPerChannel = function(req, res) {
     ' from ' + SEARCH_IMPRESSION_TABLES + ', ' + DIRECT_IMPRESSION_TABLES +
     ' WHERE business = "' + businessName + '" ' +
     ' AND channel in ("MOB", "WP") ' +
-    ' AND timestamp >= TIMESTAMP("' + fromDate.getFullYear() + '-' + (fromDate.getMonth() + 1) + '-01") ' +
-    ' AND timestamp < TIMESTAMP("' + toDate.getFullYear() + '-' + (toDate.getMonth() + 1) + '-01") ' +
     ' GROUP BY year, month, day, channel ' +
     ' ORDER BY year, month, day, channel';
+  console.log(query);
+
+  bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
+};
+
+exports.getAverageImpressionsPerChannel = function(req, res) {
+  console.log('getAverageImpressionsByChannel');
+
+  var query = 'SELECT year, month, day, channel, avg(impressions) average_impressions' +
+    ' FROM ( ' +
+      ' SELECT business, year, month, day, channel, count(1) as impressions ' +
+      ' FROM ' + SEARCH_IMPRESSION_TABLES + ', ' + DIRECT_IMPRESSION_TABLES + 
+      ' WHERE channel in ("MOB", "WP") ' +
+      ' GROUP BY channel, business, year, month, day) ' +
+    ' GROUP BY channel, year, month, day ' +
+    ' ORDER BY channel, year, month, day';
   console.log(query);
 
   bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
