@@ -11,7 +11,7 @@ angular.module('roiBigQuerySpike')
     //   console.log('Failed to download business names');
     // });
     // return only 1 busines name for debugging purpose
-    $scope.businessNames = ['Hamilton Rd Smash Repairs'];
+    $scope.businessNames = ['Mobil Oil Australia'];
 
     $scope.bothBusNameAndBookAreSelected = function() {
       return $scope.book && $scope.businessName;
@@ -31,6 +31,10 @@ angular.module('roiBigQuerySpike')
 
     $scope.setState = function(state) {
         $scope.state = state;
+        $scope.books = [];
+        for (var idx = 0; idx < 10; idx++) {
+            $scope.books.push($scope.state + idx);
+        }
     };
 
     $scope.setBook = function(book) {
@@ -38,7 +42,4 @@ angular.module('roiBigQuerySpike')
     };
 
     $scope.books = [];
-    for (var idx = 0; idx < 10; idx++) {
-        $scope.books.push('BOOK' + idx);
-    }
   }]);

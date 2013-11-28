@@ -16,9 +16,12 @@ angular.module('roiBigQuerySpike')
     };
 
      var fetchDataForStateRollupReport = function() {
-      var lastMonth = Roiservice.dateOffsetByMonth(-1)
-        , promise = Roiservice.fetchDataForStateRollupReport($scope.businessName, $scope.state, lastMonth.getFullYear(), lastMonth.getMonth() + 1);
-        $scope.isLoadingStateRollupReport = true;
+      var lastMonth = Roiservice.dateOffsetByMonth(-1);
+      $scope.month = lastMonth.getMonth();
+      $scope.year = lastMonth.getFullYear();
+      var promise = Roiservice.fetchDataForStateRollupReport($scope.businessName, $scope.state, $scope.year, $scope.month + 1);
+      $scope.isLoadingStateRollupReport = true;
+        
       promise.then(
         function(responses, status, headers, config) {
           var interactionsPerBookResp = responses[0].data;
