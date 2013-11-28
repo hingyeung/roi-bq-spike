@@ -208,6 +208,41 @@ exports.getAllRecentImpressionsForBusiness = function(req, res) {
   bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
 };
 
+
+//select ssub, count(ssub) as impression_count  from [12months_fake_roi_data_20131127.fake_search_impressions_2013_11]  where timestamp >= TIMESTAMP("2013-5-01")  AND timestamp < TIMESTAMP("2013-11-01")  GROUP BY ssub ORDER BY ssub
+
+exports.getSearchImpressionsByLocation = function(req, res) {
+  console.log('getSearchImpressionsByLocation');
+  var toDate = new Date()
+    , fromDate = new Date();
+  fromDate.setMonth(fromDate.getMonth() - 6);
+
+  var businessName = req.params.businessName
+    , query = 'select ssub, count(ssub) as impression_count ' +
+    ' from ' +
+           '[12months_fake_roi_data_20131127.fake_search_impressions_2013_1]' +
+          ',[12months_fake_roi_data_20131127.fake_search_impressions_2013_2]' +
+          ',[12months_fake_roi_data_20131127.fake_search_impressions_2013_3]' +
+          ',[12months_fake_roi_data_20131127.fake_search_impressions_2013_4]' +
+          ',[12months_fake_roi_data_20131127.fake_search_impressions_2013_5]' +
+          ',[12months_fake_roi_data_20131127.fake_search_impressions_2013_6]' +
+          ',[12months_fake_roi_data_20131127.fake_search_impressions_2013_7]' +
+          ',[12months_fake_roi_data_20131127.fake_search_impressions_2013_8]' +
+          ',[12months_fake_roi_data_20131127.fake_search_impressions_2013_9]' +
+          ',[12months_fake_roi_data_20131127.fake_search_impressions_2013_10]' +
+          ',[12months_fake_roi_data_20131127.fake_search_impressions_2013_11]' +
+          ',[12months_fake_roi_data_20131127.fake_search_impressions_2013_12]' +
+    ' where business ="' + businessName + '"' +
+    ' AND timestamp >= TIMESTAMP("' + fromDate.getFullYear() + '-' + (fromDate.getMonth() + 1) + '-01") ' +
+    ' AND timestamp < TIMESTAMP("' + toDate.getFullYear() + '-' + (toDate.getMonth() + 1) + '-01") ' +
+    ' GROUP BY ssub' +
+    ' ORDER BY impression_count desc' +
+    ' LIMIT 8';
+  console.log(query);
+
+  bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
+};
+
 exports.getAllRecentImpressionsForBusinessByBook = function(req, res) {
   console.log('getAllRecentImpressionsForBusinessByBook');
   var toDate = new Date()
