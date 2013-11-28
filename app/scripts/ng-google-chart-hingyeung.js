@@ -37,7 +37,7 @@
         .constant('googleChartApiConfig', {
             version: '1',
             optionalSettings: {
-                packages: ['corechart']
+                packages: ['corechart', 'controls']
             }
         })
 
@@ -94,6 +94,7 @@
                     $rootScope.$on('resizeMsg', function (e) {
                         $timeout(function () {
                             $scope.chartWrapper.draw();
+                            $scope.controlWrapper.draw();
                         });
                     });
 
@@ -171,7 +172,6 @@
                                     applyFormat("color", google.visualization.ColorFormat, dataTable);
                                 }
 
-
                                 var chartWrapperArgs = {
                                     chartType: $scope.chart.type,
                                     dataTable: dataTable,
@@ -206,10 +206,43 @@
                                     $scope.chartWrapper.setView($scope.chart.view);
                                 	$scope.chartWrapper.setOptions($scope.chart.options);
                                 }
-				                
-                                	
+
+                                // create dashboard
+                                var dashboardElement = $('#dashboard');
+                                $scope.dashboard = new google.visualization.Dashboard(dashboardElement[0]);
+
+                                var chartViewColumns = [];
+                                for (var cVCIdx = 0; cVCIdx < $scope.chart.data.cols.length; cVCIdx++) chartViewColumns.push(cVCIdx);
+
+                                // create date control
+                                dashboardElement.append('<div id="googlechart-date-control"></div>');
+                                $scope.controlWrapper = new google.visualization.ControlWrapper({
+                                   'controlType': 'ChartRangeFilter',
+                                   'containerId': 'googlechart-date-control',
+                                   'options': {
+                                     // Filter by the date axis.
+                                     'filterColumnIndex': 0,
+                                     'ui': {
+                                       'chartType': 'LineChart',
+                                       'chartOptions': {
+                                         'chartArea': {'width': '90%', 'height': '20%'},
+                                         'hAxis': {'baselineColor': 'none'}
+                                       },
+                                       'chartView': {
+                                            'columns': chartViewColumns
+                                       },
+                                       // 1 day in milliseconds = 24 * 60 * 60 * 1000 = 86,400,000
+                                       'minRangeSize': 86400000
+                                     }
+                                   },
+                                   'state': {'range': {'start': new Date(2013, 1, 9), 'end': new Date()}}
+                                });
+
+                                // bind dashboard          
+                                $scope.dashboard.bind( $scope.controlWrapper, $scope.chartWrapper);
+                                
                                 $timeout(function () {
-                                	$scope.chartWrapper.draw();
+                                	$scope.dashboard.draw(dataTable);
                                 });
                             }, 0, true);
                         }

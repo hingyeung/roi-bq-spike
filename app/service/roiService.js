@@ -22,6 +22,10 @@ angular.module('roiBigQuerySpike')
       return $http.get('http://localhost:9000/roi/interactions/' + businessName);
     };
 
+    this.fetchRecentImpressionsForBusinessPerChannel = function(businessName) {
+      return $http.get('http://localhost:9000/roi/impressions/channel/' + businessName);
+    };
+
     this.fetchInteractionsForBusinessByBookAndDate = function(businessName, book, year, month) {
       return $http.get('http://localhost:9000/roi/interactions/' + businessName +'/' + book + '/' + year + '/' + month);
     };
@@ -53,8 +57,7 @@ angular.module('roiBigQuerySpike')
         "data": {},
         "options": {
           "titleTextStyle": { "color": "#7F8C8D"},
-          "colors": ["#3498DB"],
-          "legend": {"position": "none"},
+          "legend": {position: 'right', textStyle: {color: '#aaa', fontSize: 16}},
           "title": "",
           "isStacked": "true",
           "fill": 20,
@@ -66,7 +69,7 @@ angular.module('roiBigQuerySpike')
             }
           },
           "animation":{
-            "duration": 1000,
+            "duration": 200,
             "easing": 'out',
           },
           "vAxis": {
