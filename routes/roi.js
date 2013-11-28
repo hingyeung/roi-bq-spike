@@ -124,13 +124,34 @@ exports.getRecentInteractionsForBusiness = function(req, res) {
   fromDate.setMonth(fromDate.getMonth() - 6);
 
   var businessName = req.params.businessName
-    , query = 'SELECT year, month, count(action) as action_count ' +
+    , query = 'SELECT year, month, day, count(action) as action_count ' +
     ' from ' + ACTION_TABLES +
     ' WHERE business = "' + businessName + '" ' +
     ' AND timestamp >= TIMESTAMP("' + fromDate.getFullYear() + '-' + (fromDate.getMonth() + 1) + '-01") ' +
     ' AND timestamp < TIMESTAMP("' + toDate.getFullYear() + '-' + (toDate.getMonth() + 1) + '-01") ' +
-    ' GROUP BY year, month ' +
-    ' ORDER BY year, month';
+    ' GROUP BY year, month, day ' +
+    ' ORDER BY year, month, day';
+  console.log(query);
+
+  bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
+};
+
+exports.getRecentImpressionsForBusinessPerChannel = function(req, res) {
+  console.log('getRecentImpressionsForBusinessByChannel');
+
+  var toDate = new Date()
+    , fromDate = new Date();
+  fromDate.setMonth(fromDate.getMonth() - 6);
+
+  var businessName = req.params.businessName
+    , query = 'SELECT year, month, day, channel, count(1) as impression_count ' +
+    ' from ' + SEARCH_IMPRESSION_TABLES + ', ' + DIRECT_IMPRESSION_TABLES +
+    ' WHERE business = "' + businessName + '" ' +
+    ' AND channel in ("MOB", "WP") ' +
+    ' AND timestamp >= TIMESTAMP("' + fromDate.getFullYear() + '-' + (fromDate.getMonth() + 1) + '-01") ' +
+    ' AND timestamp < TIMESTAMP("' + toDate.getFullYear() + '-' + (toDate.getMonth() + 1) + '-01") ' +
+    ' GROUP BY year, month, day, channel ' +
+    ' ORDER BY year, month, day, channel';
   console.log(query);
 
   bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));

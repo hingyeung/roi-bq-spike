@@ -172,7 +172,6 @@
                                     applyFormat("color", google.visualization.ColorFormat, dataTable);
                                 }
 
-
                                 var chartWrapperArgs = {
                                     chartType: $scope.chart.type,
                                     dataTable: dataTable,
@@ -212,6 +211,9 @@
                                 var dashboardElement = $('#dashboard');
                                 $scope.dashboard = new google.visualization.Dashboard(dashboardElement[0]);
 
+                                var chartViewColumns = [];
+                                for (var cVCIdx = 0; cVCIdx < $scope.chart.data.cols.length; cVCIdx++) chartViewColumns.push(cVCIdx);
+
                                 // create date control
                                 dashboardElement.append('<div id="googlechart-date-control"></div>');
                                 $scope.controlWrapper = new google.visualization.ControlWrapper({
@@ -227,7 +229,7 @@
                                          'hAxis': {'baselineColor': 'none'}
                                        },
                                        'chartView': {
-                                            'columns': [0, 1]
+                                            'columns': chartViewColumns
                                        },
                                        // 1 day in milliseconds = 24 * 60 * 60 * 1000 = 86,400,000
                                        'minRangeSize': 86400000
@@ -238,7 +240,7 @@
 
                                 // bind dashboard          
                                 $scope.dashboard.bind( $scope.controlWrapper, $scope.chartWrapper);
-
+                                
                                 $timeout(function () {
                                 	$scope.dashboard.draw(dataTable);
                                 });
