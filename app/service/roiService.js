@@ -14,6 +14,10 @@ angular.module('roiBigQuerySpike')
       return $http.get('http://localhost:9000/roi/10RandomBusinessNames');
     };
 
+    this.fetchCaptionSizeVsAppearance = function() {
+      return $http.get('http://localhost:9000/roi/captionSizeVsAppearance');
+    }
+
     this.fetchRecentInteractionsForBusinessByBook = function(businessName, book) {
       return $http.get('http://localhost:9000/roi/interactions/' + businessName + '/' + book);
     };

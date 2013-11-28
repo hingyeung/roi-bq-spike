@@ -26,15 +26,18 @@ var https = require('https')
 
   var ACTION_TABLES = [],
       DIRECT_IMPRESSION_TABLES = [],
-      SEARCH_IMPRESSION_TABLES = [];
+      SEARCH_IMPRESSION_TABLES = [],
+      BUSINESS_DETAILS_TABLE;
+
   for (var i = 1; i < 12; i++) {
     ACTION_TABLES.push('[' + DATA_SET + '.fake_actions_2013_' + i + ']');
     DIRECT_IMPRESSION_TABLES.push('[' + DATA_SET + '.fake_direct_impressions_2013_' + i +']');
     SEARCH_IMPRESSION_TABLES.push('[' + DATA_SET + '.fake_search_impressions_2013_' + i + ']');
   }
-  ACTION_TABLES.join(',');
-  DIRECT_IMPRESSION_TABLES.join(',');
-  SEARCH_IMPRESSION_TABLES.join(',');
+  ACTION_TABLES = ACTION_TABLES.join(',');
+  DIRECT_IMPRESSION_TABLES = DIRECT_IMPRESSION_TABLES.join(',');
+  SEARCH_IMPRESSION_TABLES = SEARCH_IMPRESSION_TABLES.join(',');
+  BUSINESS_DETAILS_TABLE = '[' + DATA_SET + '.business_details]';
 
 exports.getTenRandomBusinessNames = function(req, res) {
   var names = [];
@@ -56,6 +59,25 @@ var bigQueryCallback = function(res) {
     res.contentType('application/json');
     res.send(resp);
   };
+};
+
+exports.getCaptionSizeVsAppearance = function(req, res) {
+  var query =
+    'select bd.size as caption_size, count(*) as appearance_count ' +
+      'from ' +
+      '( ' +
+      'select business, count(*) from ' + SEARCH_IMPRESSION_TABLES + ' ' +
+      ' group by business ' +
+      ') as si ' +
+    'join ' +
+    BUSINESS_DETAILS_TABLE + ' as bd ' +
+    'on bd.name = si.business ' +
+    'group by caption_size ' +
+    'order by caption_size';
+
+    console.log(query);
+
+    bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
 };
 
 exports.getInteractionsPerBook = function(req, res) {

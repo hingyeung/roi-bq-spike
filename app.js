@@ -22,6 +22,7 @@ app.get('/', function(request, response) {
   response.render('index.html')
 });
 app.get('/roi/10RandomBusinessNames', roi.getTenRandomBusinessNames);
+app.get('/roi/captionSizeVsAppearance', roi.getCaptionSizeVsAppearance);
 app.get('/roi/interactions/:businessName/:book/:year/:month', roi.getInteractionForBusinessByBook);
 app.get('/roi/interactions/:businessName/:book', roi.getRecentInteractionsForBusinessByBook);
 app.get('/roi/interactions/:businessName', roi.getRecentInteractionsForBusiness);
