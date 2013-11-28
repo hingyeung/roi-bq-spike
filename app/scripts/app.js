@@ -28,6 +28,10 @@ angular.module('roiBigQuerySpike', ['googlechart'])
         templateUrl: 'views/stateRollup.html',
         controller: 'StateRollupCtrl'
       })
+      .when('/searchImpressionLocations/', {
+        templateUrl: 'views/searchImpressionLocations.html',
+        controller: 'SearchImpressionLocationCtrl'
+      })
       .otherwise({
         redirectTo: '/nationalSummary'
       });

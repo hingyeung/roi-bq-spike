@@ -1,0 +1,28 @@
+<div class="panel  panel-info">
+  <div class="panel-heading">
+    <div class="panel-title"><h2>User's search location reports</h2></div>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="row">
+          <div class="col-md-offset-3 col-md-6">
+            <div class="progress progress-striped active" ng-show="isLoadingSearchImpressionLocations == true">
+              <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 00%">
+                <span class="sr-only">20% Complete</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <table class="table table-bordered table-striped table-condensed table-hover" ng-show="bothBusNameAndBookAreSelected() && isLoadingInteractionsByBook == false">
+          <thead>
+            <caption><strong>Users location when searching for this business {{businessName}}</strong></caption>
+          </thead>
+        </table>
+      </div>
+        <div id="locations_chart_div_container">
+            <div id="locations_chart_div"></div>
+        </div>
+    </div>
+  </div>
+</div>

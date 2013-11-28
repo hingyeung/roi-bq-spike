@@ -5,3 +5,9 @@
 .panel .progress {
   margin-top: 100px;
 }
+
+
+#locations_chart_div {
+    width: 800px;
+    margin: 0 auto;
+}
