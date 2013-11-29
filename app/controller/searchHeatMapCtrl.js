@@ -30,19 +30,49 @@ angular.module('roiBigQuerySpike')
       promise.success(function(resp, status, headers, config) {
       console.log("promise came back with " + resp.list.length + " results");  
 
-        //var geocoder = new google.maps.Geocoder();
+      var geocoder = new google.maps.Geocoder();
 
-        
+      var heatMapData = [];
+
+      var geocodeSuccess = 0;
+      var geocodeFailure = 0;
+
+
+var addLocationToHeatMap = function(results, status) {
+  
+  if (status == google.maps.GeocoderStatus.OK)
+  {
+      geocodeSuccess++;
+      heatMapData.push({location: results[0].geometry.location, weight: this.impression_count});
+  }
+  else
+  {
+      geocodeFailure++;
+      // console.log("geocoding failed " + status);
+  }
+};
+
+
 
 resp.list.map( function(suburbInfo) {
      var address = suburbInfo.suburb + ", " + suburbInfo.state + ", Australia";
 
+    
+     geocoder.geocode({ 'address': address}, addLocationToHeatMap.bind(suburbInfo));
+   
+
      // console.log("adding " + address + "with count " + suburbInfo.impression_count );
      //geocoder.geocode({ 'address': suburbInfo.suburb}, addLocationToHeatMap.bind(suburbInfo));
-})
+});
+        setTimeout(function(){
+        console.log("geocode succeeded " + geocodeSuccess);
+        console.log("geocode failed " + geocodeFailure);
+      }, 8000);
+
+        setTimeout(function(){initializeMap(heatMapData)}, 8000);
         $scope.searchHeatMapData = "data";
         $scope.isLoadingSearchImpressionLocations = false;
-        initializeMap();
+        
         
       }).error(function(data, status, headers, config) {
         console.log('Failed to download search interactions');

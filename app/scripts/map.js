@@ -40,38 +40,10 @@ var mapStyles = [
     }
   ];
 
-//data that would come in from the service
-var suburbInfo = [
-                    {suburb: "Sydney, NSW, Australia", searches: 180},
-                    {suburb: "Melbourne, VIC, Australia", searches: 300},
-                    {suburb: "Oakleigh, VIC, Australia", searches: 80},
-                    {suburb: "Rockbank, VIC, Australia", searches: 100},
-                    {suburb: "Laverton, VIC, Australia", searches: 200},
-                    {suburb: "Geelong, VIC, Australia", searches: 300},
-                    {suburb: "Perth, WA, Australia", searches: 40},
-                    {suburb: "Darwin, NT, Australia", searches: 40}
-                  ]
-
-var heatMapData = [];
-
-
-var addLocationToHeatMap = function(results, status) {
-  if (status == google.maps.GeocoderStatus.OK)
-  {
-      heatMapData.push({location: results[0].geometry.location, weight: this.searches});
-  }
-};
-
-var geocoder = new google.maps.Geocoder();
-
-suburbInfo.map( function(suburbInfo) {
-     geocoder.geocode({ 'address': suburbInfo.suburb}, addLocationToHeatMap.bind(suburbInfo));
-})
-
-
-function initializeMap() {
+function initializeMap(heatMapData) {
 
 console.log("initialize map");
+console.log(heatMapData);
 
 //create the map
 map = new google.maps.Map(document.getElementById('map-canvas'), {
