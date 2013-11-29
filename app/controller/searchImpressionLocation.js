@@ -43,9 +43,12 @@ angular.module('roiBigQuerySpike')
           data.addColumn('number', 'Impressions');
           data.addRows(chartData);
 
-          var options = {'title':'Top 8 most common search locations users are searching from, for "' + $scope.businessName + '"',
-                         'width':800,
-                         'height':600};
+          var options = {'title': 'Top 8 most common search locations users are searching from, for "' + $scope.businessName + '"',
+            'width': 800,
+            legend : {textStyle: {fontSize: 20}},
+            hAxis : {textStyle: {fontSize: 20}},
+            VAxis : {textStyle: {fontSize: 20}},
+            'height': 600};
 
           var chart = new google.visualization.PieChart($("#locations_chart_div")[0]);
           chart.draw(data, options);

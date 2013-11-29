@@ -108,6 +108,7 @@ angular.module('roiBigQuerySpike')
           "fill": 20,
           "displayExactValues": true,
           "hAxis": {
+            textStyle: {fontSize: 20},
             "title": "Date",
             "gridlines": {
               "count": 10
@@ -118,6 +119,7 @@ angular.module('roiBigQuerySpike')
             "easing": 'out',
           },
           "vAxis": {
+            textStyle: {fontSize: 20},
             "title": "Actions"
           }
         },

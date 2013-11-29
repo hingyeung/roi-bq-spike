@@ -78,7 +78,7 @@ angular.module('roiBigQuerySpike')
 
         var options = {'title': 'All types of interactions for "' + $scope.businessName + '"',
           'width': 1000,
-          'height': 800,
+          'height': 1000,
           isStacked: true,
           vAxis: {
             textStyle: {
