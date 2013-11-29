@@ -67,7 +67,7 @@ setTimeout(function(){
   debugMap = map;
   debugHeatMap = heatmap;
 
-}, 1000);
+}, 0);
 }
 
 google.maps.event.addDomListener(window, 'load', initializeMap);

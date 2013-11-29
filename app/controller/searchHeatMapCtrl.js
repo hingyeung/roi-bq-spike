@@ -25,7 +25,7 @@ angular.module('roiBigQuerySpike')
       }, 100);
 
       $scope.isLoadingSearchImpressionLocations = true;
-      var promise = Roiservice.fetchSearchImpressionsByLocationForBusiness($scope.businessName, 1000);
+      var promise = Roiservice.fetchSearchImpressionsByLocationForBusiness($scope.businessName, 20);
       $scope.isLoadingInteractionsByBook = true;
       promise.success(function(resp, status, headers, config) {
       console.log("promise came back with " + resp.list.length + " results");  
@@ -69,8 +69,7 @@ resp.list.map( function(suburbInfo) {
         console.log("geocode failed " + geocodeFailure);
       }, 8000);
 
-        setTimeout(function(){initializeMap(heatMapData)}, 8000);
-        $scope.searchHeatMapData = "data";
+        setTimeout(function(){initializeMap(heatMapData)}, 1000);
         $scope.isLoadingSearchImpressionLocations = false;
         
         
