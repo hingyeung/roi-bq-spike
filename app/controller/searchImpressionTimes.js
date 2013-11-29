@@ -77,8 +77,8 @@ angular.module('roiBigQuerySpike')
 
 
         var options = {'title': 'All types of interactions for "' + $scope.businessName + '"',
-          'width': 1000,
-          'height': 1000,
+          'width': 1400,
+          'height': 600,
           isStacked: true,
           vAxis: {
             textStyle: {
@@ -88,7 +88,7 @@ angular.module('roiBigQuerySpike')
           legend: { position: 'top', maxLines: 3 }
         };
 
-        var chart = new google.visualization.BarChart($("#times_chart_div")[0]);
+        var chart = new google.visualization.ColumnChart($("#times_chart_div")[0]);
         chart.draw(data, options);
         loaded = true;
       }
