@@ -1,0 +1,14 @@
+<html>
+<head>
+    <script type="text/javascript" src="http://api-ems-stage.ext.sensis.com.au/v2/web/js/ems/?token=6293906970398831616"></script>
+</head>
+<body>
+<script type="text/javascript">
+    var service = new EMS.Service.Geocode();
+    service.geocode("Melbourne, VIC", function(response, status) {
+        console.log(response, status);
+    });
+
+</script>
+</body>
+</html>
