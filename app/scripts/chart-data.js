@@ -23,7 +23,7 @@ ChartData.prototype.transformToGoogleChartData = function() {
 	};
 
 	for (var i = 0; i < this.chart.columnDefinition.length; i++) { data.cols.push(this.chart.columnDefinition[i]); }
-	if (data.cols.length === 1) data.cols.push( { id: "dummy", label: "Dummy Column for Blank Chart", type: "number" } );
+	if (data.cols.length === 1) data.cols.push( { id: "dummy", label: "Business", type: "number" } );
 
 	var dates = Object.keys(this.chart.data).sort(function(dateStr, anotherDateStr) { 
 		var date = new Date(dateStr);

@@ -17,33 +17,19 @@ angular.module('roiBigQuerySpike')
       chart.totalBytesProcessed = resp.totalBytesProcessed;
     };
 
-    var fetchRecentImpressionsForBusinessPerChannel = function() {
-      var promise = Roiservice.fetchRecentImpressionsForBusinessPerChannel($scope.businessName);
+    var fetchRecentImpressionsForBusiness = function() {
+      var promise = Roiservice.fetchRecentImpressionsForBusiness($scope.businessName);
       promise.success(function(resp, status, headers, config) {
         var data = resp.list;
 
-        var channels = {};
+        var impressions = [];
         for (var idx = 0; idx < data.length; idx++) {
-          if (!channels.hasOwnProperty(data[idx].channel)) {
-            channels[data[idx].channel] = {
-              id: data[idx].channel.toLowerCase() + 'impressions',
-              label: data[idx].channel + " Impressions",
-              type: "number",
-              rows: []
-            };
-          }
-          channels[data[idx].channel].rows.push({
+          impressions.push({
             key: new Date(data[idx].year, data[idx].month, data[idx].day),
             value: data[idx].impression_count
           });
         }
-
-        for (var chKey in channels) {
-          if (channels.hasOwnProperty(chKey)) {
-            var channel = channels[chKey];
-            chartData.addColumn(channel.id, channel.label, channel.type, channel.rows); 
-          }
-        }
+        chartData.addColumn('impressions', 'Impressions', 'number', impressions); 
 
         $scope.nationalTotalsChart.data = chartData.transformToGoogleChartData();
 
@@ -52,33 +38,19 @@ angular.module('roiBigQuerySpike')
       });
     };
 
-    var fetchRecentInteractionsForBusinessPerChannel = function() {
-      var promise = Roiservice.fetchRecentInteractionsForBusinessPerChannel($scope.businessName);
+    var fetchRecentInteractionsForBusiness = function() {
+      var promise = Roiservice.fetchRecentInteractionsForBusiness($scope.businessName);
       promise.success(function(resp, status, headers, config) {
         var data = resp.list;
 
-        var channels = {};
+        var interactions = [];
         for (var idx = 0; idx < data.length; idx++) {
-          if (!channels.hasOwnProperty(data[idx].channel)) {
-            channels[data[idx].channel] = {
-              id: data[idx].channel.toLowerCase() + 'interactions',
-              label: data[idx].channel + " Interactions",
-              type: "number",
-              rows: []
-            };
-          }
-          channels[data[idx].channel].rows.push({
+          interactions.push({
             key: new Date(data[idx].year, data[idx].month, data[idx].day),
             value: data[idx].action_count
           });
         }
-
-        for (var chKey in channels) {
-          if (channels.hasOwnProperty(chKey)) {
-            var channel = channels[chKey];
-            chartData.addColumn(channel.id, channel.label, channel.type, channel.rows); 
-          }
-        }
+        chartData.addColumn('interactions', 'Interactions', 'number', interactions); 
 
         $scope.nationalTotalsChart.data = chartData.transformToGoogleChartData();
 
@@ -87,33 +59,19 @@ angular.module('roiBigQuerySpike')
       });
     };
 
-    var fetchAverageImpressionsPerChannel = function() {
-      var promise = Roiservice.fetchAverageImpressionsPerChannel();
+    var fetchAverageImpressions = function() {
+      var promise = Roiservice.fetchAverageImpressions();
       promise.success(function(resp, status, headers, config) {
         var data = resp.list;
 
-        var channels = {};
+        var impressions = [];
         for (var idx = 0; idx < data.length; idx++) {
-          if (!channels.hasOwnProperty(data[idx].channel)) {
-            channels[data[idx].channel] = {
-              id: data[idx].channel.toLowerCase() + 'averageimpressions',
-              label: 'Average ' + data[idx].channel + " Impressions",
-              type: "number",
-              rows: []
-            };
-          }
-          channels[data[idx].channel].rows.push({
+          impressions.push({
             key: new Date(data[idx].year, data[idx].month, data[idx].day),
             value: data[idx].average_impressions
           });
         }
-
-        for (var chKey in channels) {
-          if (channels.hasOwnProperty(chKey)) {
-            var channel = channels[chKey];
-            chartData.addColumn(channel.id, channel.label, channel.type, channel.rows); 
-          }
-        }
+        chartData.addColumn('averageimpressions', 'Average Impressions', 'number', impressions); 
 
         $scope.nationalTotalsChart.data = chartData.transformToGoogleChartData();
 
@@ -122,33 +80,19 @@ angular.module('roiBigQuerySpike')
       });
     };
 
-    var fetchAverageInteractionsPerChannel = function() {
-      var promise = Roiservice.fetchAverageInteractionsPerChannel();
+    var fetchAverageInteractions = function() {
+      var promise = Roiservice.fetchAverageInteractions();
       promise.success(function(resp, status, headers, config) {
         var data = resp.list;
 
-        var channels = {};
+        var interactions = [];
         for (var idx = 0; idx < data.length; idx++) {
-          if (!channels.hasOwnProperty(data[idx].channel)) {
-            channels[data[idx].channel] = {
-              id: data[idx].channel.toLowerCase() + 'averageinteractions',
-              label: 'Average ' + data[idx].channel + " Interactions",
-              type: "number",
-              rows: []
-            };
-          }
-          channels[data[idx].channel].rows.push({
+          interactions.push({
             key: new Date(data[idx].year, data[idx].month, data[idx].day),
             value: data[idx].average_interactions
           });
         }
-
-        for (var chKey in channels) {
-          if (channels.hasOwnProperty(chKey)) {
-            var channel = channels[chKey];
-            chartData.addColumn(channel.id, channel.label, channel.type, channel.rows); 
-          }
-        }
+        chartData.addColumn('averageinteractions', 'Average Interactions', 'number', interactions); 
 
         $scope.nationalTotalsChart.data = chartData.transformToGoogleChartData();
 
@@ -161,10 +105,10 @@ angular.module('roiBigQuerySpike')
     $scope.$watch('businessName', function() {
       if (!$scope.businessName) return;
       $scope.nationalTotalsChart.options.title = 'Recent Events for ' + $scope.businessName;
-      fetchRecentImpressionsForBusinessPerChannel();
-      fetchRecentInteractionsForBusinessPerChannel();
-      fetchAverageImpressionsPerChannel();
-      fetchAverageInteractionsPerChannel();
+      fetchRecentImpressionsForBusiness();
+      fetchRecentInteractionsForBusiness();
+      fetchAverageImpressions();
+      fetchAverageInteractions();
     });
 
   }]);
