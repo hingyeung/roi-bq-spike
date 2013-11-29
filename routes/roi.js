@@ -37,11 +37,12 @@ var https = require('https')
   SEARCH_IMPRESSION_TABLES.join(',');
 
 exports.getTenRandomBusinessNames = function(req, res) {
-  var names = [];
-  for (var idx = 0; idx < 10; idx++) {
-    names.push(businessNames[randomBetween(0, businessNames.length - 1)]);
-  }
-  res.send(names);
+  var query = 'SELECT business' +
+      ' FROM ' + ACTION_TABLES +
+    ' limit 10';
+  console.log(query);
+
+  bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
 };
 
 var bigQueryCallback = function(res) {
@@ -306,7 +307,7 @@ exports.getDirectImpressionsByTime = function(req, res) {
     ' from ' + DIRECT_IMPRESSION_TABLES +
     ' where business ="' + businessName + '"' +
     ' GROUP BY hour' +
-    ' ORDER BY hour desc';
+    ' ORDER BY hour asc';
   console.log("query: ", query);
 
   bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
@@ -319,7 +320,7 @@ exports.getSearchImpressionsByTime = function(req, res) {
     ' from ' + SEARCH_IMPRESSION_TABLES +
     ' where business ="' + businessName + '"' +
     ' GROUP BY hour' +
-    ' ORDER BY hour desc';
+    ' ORDER BY hour asc';
   console.log("query: ", query);
 
   bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
@@ -332,7 +333,7 @@ exports.getActionsByTime = function(req, res) {
     ' from ' + ACTION_TABLES +
     ' where business ="' + businessName + '"' +
     ' GROUP BY hour' +
-    ' ORDER BY hour desc';
+    ' ORDER BY hour asc';
   console.log("query: ", query);
 
   bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));

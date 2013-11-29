@@ -1,15 +1,19 @@
 'use strict';
 
 angular.module('roiBigQuerySpike')
-  .controller('MainCtrl', ['$scope', '$location', function ($scope, $location) {
+  .controller('MainCtrl', ['$scope', '$location', "$http", function ($scope, $location, $http) {
     // TODO: this block of code repeats in each controller
-    // var promise = $http.get('http://localhost:5000/roi/10RandomBusinessNames');
-    // promise.success(function(data, status, headers, config) {
-    //   $scope.businessNames = data;
-    // }).error(function(data, status, headers, config) {
-    //   $scope.businessName = [];
-    //   console.log('Failed to download business names');
-    // });
+    var promise = $http.get('roi/10RandomBusinessNames');
+    promise.success(function(data, status, headers, config) {
+      var businesses = []
+      for( var x = 0;x < 10; x++) {
+        businesses.push(data.list[x].business)
+      }
+      $scope.businessNames = $scope.businessNames.concat(businesses);
+    }).error(function(data, status, headers, config) {
+       $scope.businessName = [];
+       console.log('Failed to download business names');
+    });
     // return only 1 busines name for debugging purpose
     $scope.businessNames = ['Mobil Oil Australia'];
 

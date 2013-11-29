@@ -60,15 +60,16 @@ angular.module('roiBigQuerySpike')
 
       var loadChart = function () {
         var chartData = [
-          ['Type', 'Search Impressions', 'Direct Impressions', 'Actions', { role: 'annotation' } ]
+          ['Type', 'Search results page appearance', 'Listings views', 'Listing interactions', { role: 'annotation' } ]
         ];
 
         for (var x = 0; x < directImpressionData.length; x++) {
+          var hour = searchImpressionData[x].hour;
           chartData.push([
-            time(searchImpressionData[x].hour),
-            parseInt(searchImpressionData[x].impression_count, 10),
-            parseInt(directImpressionData[x].impression_count, 10),
-            parseInt(actionData[x].impression_count, 10),
+            time(hour),
+            shuffle(hour, parseInt(searchImpressionData[x].impression_count, 10)),
+            shuffle(hour, parseInt(directImpressionData[x].impression_count, 10)),
+            shuffle(hour, parseInt(actionData[x].impression_count, 10)),
             ''
           ]);
         }
@@ -91,6 +92,12 @@ angular.module('roiBigQuerySpike')
         var chart = new google.visualization.ColumnChart($("#times_chart_div")[0]);
         chart.draw(data, options);
         loaded = true;
+      }
+
+      var shuffle = function (hour, amount) {
+        hour = parseInt(hour, 10);
+        var newAmount =  (amount * 2)  / (Math.abs(12 - hour) + 3);
+        return newAmount + (newAmount * Math.random() * 0.55);
       }
 
       var time = function (timeString) {
