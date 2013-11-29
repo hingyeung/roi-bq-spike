@@ -40,6 +40,10 @@ angular.module('roiBigQuerySpike', ['googlechart'])
         templateUrl: 'views/searchImpressionLocations.html',
         controller: 'SearchImpressionLocationCtrl'
       })
+      .when('/searchHeatMap', {
+        templateUrl: 'views/searchHeatMap.html',
+        controller: 'SearchHeatMapCtrl'
+      })
       .otherwise({
         redirectTo: '/nationalSummary'
       });
