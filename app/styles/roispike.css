@@ -1,4 +1,4 @@
-body .container {
+.container {
 	max-width: 100%;
 }
 
@@ -10,6 +10,9 @@ body .container {
   margin-top: 100px;
 }
 
+.navbar {
+	margin-bottom: 0px;
+}
 
 #locations_chart_div {
     width: 800px;
