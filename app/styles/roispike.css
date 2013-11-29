@@ -1,3 +1,7 @@
+body .container {
+	max-width: 100%;
+}
+
 .container .panel {
   min-height: 400px;
 }
@@ -10,4 +14,11 @@
 #locations_chart_div {
     width: 800px;
     margin: 0 auto;
+}
+
+.report-content h2 {
+	padding-left: 50px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	font-size: 50px;
 }

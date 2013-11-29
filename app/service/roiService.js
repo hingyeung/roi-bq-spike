@@ -101,8 +101,8 @@ angular.module('roiBigQuerySpike')
         "cssStyle": "height:600px; width:100%;",
         "data": {},
         "options": {
-          "titleTextStyle": { "color": "#7F8C8D"},
-          "legend": {position: 'right', textStyle: {color: '#aaa', fontSize: 16}},
+          "titleTextStyle": { "color": "#7F8C8D", "fontSize" : 40 },
+          "legend": {position: 'right', textStyle: {color: '#aaa', fontSize: 20}},
           "title": "",
           "isStacked": "true",
           "fill": 20,
@@ -110,6 +110,7 @@ angular.module('roiBigQuerySpike')
           "hAxis": {
             textStyle: {fontSize: 20},
             "title": "Date",
+            "titleTextStyle": { "fontSize" : 30 },
             "gridlines": {
               "count": 10
             }
@@ -120,7 +121,8 @@ angular.module('roiBigQuerySpike')
           },
           "vAxis": {
             textStyle: {fontSize: 20},
-            "title": "Actions"
+            "title": "Actions",
+            "titleTextStyle": { "fontSize" : 30 }
           }
         },
         "isDetailsExpanded": false
