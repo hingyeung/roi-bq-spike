@@ -3,51 +3,50 @@
 angular.module('roiBigQuerySpike')
     .controller('SearchImpressionTimesCtrl', ['$scope', 'Roiservice', function ($scope, Roiservice) {
       $scope.isLoadingSearchImpressionLocations = false;
+      var timeSpent = 0;
+      var expectedTimeToLoad = 4.5;
+      var loaded = false;
+      var searchImpressionData, directImpressionData, actionData;
 
       var fetchAndDisplaySomeInfo = function () {
-        var timeSpent = 0;
-        var expectedTimeToLoad = 4.5;
-        var loaded = false;
+
 
         var interval = setInterval(function () {
           timeSpent += 0.1;
           $(".progress-bar").css("width", (timeSpent / expectedTimeToLoad) * 100 + "%");
           console.log(loaded, timeSpent > 100);
-          if (loaded && (timeSpent / expectedTimeToLoad) > 1.2) {
+          if (searchImpressionData &&
+              directImpressionData &&
+              actionData && (timeSpent / expectedTimeToLoad) > 1.2) {
             $scope.isLoadingSearchImpressionLocations = false;
             $("#times_chart_div_container").css("display", "block");
             clearInterval(interval);
             $(".progress-bar").css("display", "none");
+            loadChart();
           }
         }, 100);
 
+        var searchPromise = Roiservice.fetchSearchImpressionsByTimeForBusiness($scope.businessName);
+        var directPromise = Roiservice.fetchDirectImpressionsByTimeForBusiness($scope.businessName);
+        var actionPromise = Roiservice.fetchActionsByTimeForBusiness($scope.businessName);
+
         $scope.isLoadingSearchImpressionLocations = true;
-        var promise = Roiservice.fetchSearchImpressionsByTimeForBusiness($scope.businessName);
-        $scope.isLoadingInteractionsByBook = true;
-        promise.success(function (resp, status, headers, config) {
-          var chartData = [];
 
-          for (var x = 0; x < resp.list.length; x++) {
-            chartData.push([resp.list[x].hour, parseInt(resp.list[x].impression_count, 10)]);
-          }
 
-          drawChart();
+        searchPromise.success(function (resp, status, headers, config) {
+          searchImpressionData = resp.list
+        }).error(function (data, status, headers, config) {
+              console.log('Failed to download search interactions');
+            });
 
-          function drawChart() {
-            // Create the data table.
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Hour');
-            data.addColumn('number', 'Impressions');
-            data.addRows(chartData);
+        directPromise.success(function (resp, status, headers, config) {
+          directImpressionData = resp.list
+        }).error(function (data, status, headers, config) {
+              console.log('Failed to download search interactions');
+            });
 
-            var options = {'title': 'User search impressions broken down by time for "' + $scope.businessName + '"',
-              'width': 800,
-              'height': 600};
-
-            var chart = new google.visualization.BarChart($("#times_chart_div")[0]);
-            chart.draw(data, options);
-            loaded = true;
-          }
+        actionPromise.success(function (resp, status, headers, config) {
+          actionData = resp.list
         }).error(function (data, status, headers, config) {
               console.log('Failed to download search interactions');
             });
@@ -57,4 +56,70 @@ angular.module('roiBigQuerySpike')
         if (!$scope.businessName) return;
         fetchAndDisplaySomeInfo();
       });
+
+
+      var loadChart = function () {
+        var chartData = [
+          ['Type', 'Search Impressions', 'Direct Impressions', 'Actions', { role: 'annotation' } ]
+        ];
+
+        for (var x = 0; x < directImpressionData.length; x++) {
+          chartData.push([
+            time(searchImpressionData[x].hour),
+            parseInt(searchImpressionData[x].impression_count, 10),
+            parseInt(directImpressionData[x].impression_count, 10),
+            parseInt(actionData[x].impression_count, 10),
+            ''
+          ]);
+        }
+
+        var data = google.visualization.arrayToDataTable(chartData);
+
+
+        var options = {'title': 'All types of interactions for "' + $scope.businessName + '"',
+          'width': 1000,
+          'height': 800,
+          isStacked: true,
+          vAxis: {
+            textStyle: {
+              fontSize: 20
+            }
+          },
+          legend: { position: 'top', maxLines: 3 }
+        };
+
+        var chart = new google.visualization.BarChart($("#times_chart_div")[0]);
+        chart.draw(data, options);
+        loaded = true;
+      }
+
+      var time = function (timeString) {
+        return (parseInt(timeString, 10) < 10 ? "0" + timeString : timeString ) + ":00";
+//        return {
+//            0 : "12am",
+//            1 : "01am",
+//            2 : "02am",
+//            3 : "03am",
+//            4 : "04am",
+//            5 : "05am",
+//            6 : "06am",
+//            7 : "07am",
+//            8 : "08am",
+//            9 : "09am",
+//            10 : "10am",
+//            11 : "11am",
+//            12 : "12pm",
+//            13 : "01pm",
+//            14 : "02pm",
+//            15 : "03pm",
+//            16 : "04pm",
+//            17 : "05pm",
+//            18 : "06pm",
+//            19 : "07pm",
+//            20 : "08pm",
+//            21 : "09pm",
+//            22 : "10pm",
+//            23 : "11pm"
+//        }[timeString];
+      }
     }]);

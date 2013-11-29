@@ -270,10 +270,36 @@ exports.getSearchImpressionsByLocation = function(req, res) {
 //order by hour desc;
 
 exports.getDirectImpressionsByTime = function(req, res) {
-  console.log('getdirectimpresions by time');
+  console.log('get direct impressions by time');
   var businessName = req.params.businessName,
       query = 'select hour, count(hour) impression_count' +
-    ' from ' + SEARCH_IMPRESSION_TABLES + ", " + DIRECT_IMPRESSION_TABLES + ", " + ACTION_TABLES +
+    ' from ' + DIRECT_IMPRESSION_TABLES +
+    ' where business ="' + businessName + '"' +
+    ' GROUP BY hour' +
+    ' ORDER BY hour desc';
+  console.log("query: ", query);
+
+  bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
+};
+
+exports.getSearchImpressionsByTime = function(req, res) {
+  console.log('get search impressions  by time');
+  var businessName = req.params.businessName,
+      query = 'select hour, count(hour) impression_count' +
+    ' from ' + SEARCH_IMPRESSION_TABLES +
+    ' where business ="' + businessName + '"' +
+    ' GROUP BY hour' +
+    ' ORDER BY hour desc';
+  console.log("query: ", query);
+
+  bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
+};
+
+exports.getActionsByTime = function(req, res) {
+  console.log('get actions by time');
+  var businessName = req.params.businessName,
+      query = 'select hour, count(hour) impression_count' +
+    ' from ' + ACTION_TABLES +
     ' where business ="' + businessName + '"' +
     ' GROUP BY hour' +
     ' ORDER BY hour desc';

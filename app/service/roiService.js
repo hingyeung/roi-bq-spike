@@ -63,6 +63,14 @@ angular.module('roiBigQuerySpike')
       return $http.get('http://localhost:9000/roi/searchImpressionTimes/' + businessName);
     };
 
+    this.fetchDirectImpressionsByTimeForBusiness = function (businessName) {
+      return $http.get('http://localhost:9000/roi/directImpressionTimes/' + businessName);
+    };
+
+    this.fetchActionsByTimeForBusiness = function (businessName) {
+      return $http.get('http://localhost:9000/roi/actionTimes/' + businessName);
+    };
+
     this.fetchDataForStateRollupReport = function(businessName, state, year, month) {
       return $q.all([
              $http.get('http://localhost:9000/roi/interactionsPerBook/' + businessName + '/' + state + '/' + year + '/' + month),
