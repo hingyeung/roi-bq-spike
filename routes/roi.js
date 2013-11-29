@@ -162,6 +162,21 @@ exports.getAverageInteractionsPerChannel = function(req, res) {
   bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
 };
 
+exports.getAverageInteractions = function(req, res) {
+  console.log('getAverageInteractions');
+
+  var query = 'SELECT year, month, day, avg(actions) average_interactions' +
+    ' FROM ( ' +
+      ' SELECT business, year, month, day, count(1) as actions ' +
+      ' FROM ' + ACTION_TABLES + 
+      ' GROUP BY business, year, month, day) ' +
+    ' GROUP BY year, month, day ' +
+    ' ORDER BY year, month, day';
+  console.log(query);
+
+  bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
+};
+
 exports.getRecentImpressionsForBusinessPerChannel = function(req, res) {
   console.log('getRecentImpressionsForBusinessByChannel');
 
@@ -192,6 +207,21 @@ exports.getAverageImpressionsPerChannel = function(req, res) {
       ' GROUP BY channel, business, year, month, day) ' +
     ' GROUP BY channel, year, month, day ' +
     ' ORDER BY channel, year, month, day';
+  console.log(query);
+
+  bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));
+};
+
+exports.getAverageImpressions = function(req, res) {
+  console.log('getAverageImpressions');
+
+  var query = 'SELECT year, month, day, avg(impressions) average_impressions' +
+    ' FROM ( ' +
+      ' SELECT business, year, month, day, count(1) as impressions ' +
+      ' FROM ' + SEARCH_IMPRESSION_TABLES + ', ' + DIRECT_IMPRESSION_TABLES + 
+      ' GROUP BY business, year, month, day) ' +
+    ' GROUP BY year, month, day ' +
+    ' ORDER BY year, month, day';
   console.log(query);
 
   bqClient.jobs.syncQuery({projId: ROI_PROJECT_ID, query: query}, bigQueryCallback(res));

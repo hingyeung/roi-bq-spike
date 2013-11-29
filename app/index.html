@@ -70,16 +70,10 @@
     <div class="container">
       <ul class="nav nav-pills nav-justified jumbotron">
         <li ng-class="{active: isActive('/nationalSummary')}">
-          <a href="#/nationalSummary">National Summary</a>
+          <a href="#/nationalSummary">Average vs YOU</a>
         </li>
-        <li ng-class="{active: isActive('/stateRollup')}">
-          <a href="#/stateRollup">State Rollup</a>
-        </li>
-        <li ng-class="{active: isActive('/bookImpressions')}">
-          <a href="#/bookImpressions">Book Impressions</a>
-        </li>
-        <li ng-class="{active: isActive('/bookInteractions')}">
-          <a href="#/bookInteractions">Book Interactions</a>
+        <li ng-class="{active: isActive('/channels')}">
+          <a href="#/channels">Desktop vs Mobile</a>
         </li>
           <li ng-class="{active: isActive('/searchImpressionTimes')}">
           <a href="#/searchImpressionTimes">Time info</a>
@@ -117,6 +111,7 @@
     <script src="service/roiService.js"></script>
     <script src="controller/bookImpression.js"></script>
     <script src="controller/nationalSummary.js"></script>
+    <script src="controller/channels.js"></script>
     <script src="controller/stateRollup.js"></script>
     <script src="controller/searchImpressionLocation.js"></script>
     <script src="controller/searchImpressionTimes.js"></script>
