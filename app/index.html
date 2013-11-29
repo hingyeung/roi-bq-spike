@@ -81,6 +81,9 @@
         <li ng-class="{active: isActive('/searchImpressionLocations')}">
           <a href="#/searchImpressionLocations">Search locations</a>
         </li>
+        <li ng-class="{active: isActive('/searchHeatMap')}">
+          <a href="#/searchHeatMap">Search Heat Map</a>
+        </li>
       </ul>
       <div class="report-content" ng-view></div>
     </div>
@@ -115,6 +118,10 @@
     <script src="controller/stateRollup.js"></script>
     <script src="controller/searchImpressionLocation.js"></script>
     <script src="controller/searchImpressionTimes.js"></script>
+    <script src="controller/searchHeatMapCtrl.js"></script>
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDT85tldX5eB_5fV0wmi9JC3UpdQ0dQ2DE&sensor=false&libraries=visualization">
+    </script>
     <!--script>
       $(document).ready(function() { $("select").selectpicker({style: 'btn-primary', menuStyle: 'dropdown-inverse'}); });
     </script-->
