@@ -283,7 +283,7 @@ exports.getSearchImpressionsByLocation = function(req, res) {
   console.log('getSearchImpressionsByLocation');
   var businessName = req.params.businessName
     , limit = req.params.limit
-    , query = 'select ssub as suburb, state, count(ssub) as impression_count ' +
+    , query = 'select ssub as suburb, sst as state, count(ssub) as impression_count ' +
     ' from ' + SEARCH_IMPRESSION_TABLES +
     ' where business ="' + businessName + '"' +
     ' GROUP BY suburb, state' +
